@@ -1,4 +1,4 @@
-package com.xihad.myapplication.utils
+package com.xihad.androidutils.utils
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -11,12 +11,14 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
-import com.xihad.androidutils.utils.AppUtil
+import com.xihad.androidutils.R
+import com.xihad.myapplication.utils.SharePrefSettings
 import org.jsoup.Jsoup
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -39,13 +41,6 @@ class AndroidUtils {
             sharePrefSettings = SharePrefSettings.getInstance(activity)!!
         }
 
-        fun snackBar(msg: String) {
-            Snackbar.make(activity.window.decorView.rootView, msg, Snackbar.LENGTH_LONG).show()
-        }
-
-        fun snackBar(view: View, msg: String) {
-            Snackbar.make(view, msg, Snackbar.LENGTH_LONG).show()
-        }
 
         fun toast(msg: String) {
             Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
@@ -265,6 +260,164 @@ class AndroidUtils {
             fromPattern: String = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
         ): Date? {
             return SimpleDateFormat(fromPattern, Locale.getDefault()).parse(dateString)
+        }
+
+
+        // snackbar
+
+
+        fun defaultSnack(
+            view: View,
+            msg: String,
+            gravity: Int = Gravity.TOP,
+            icon: Int = R.drawable.ic_hand,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(activity, view, msg, gravity, 0, icon, func)
+        }
+
+        fun defaultSnack(
+            view: View,
+            msg: String,
+            gravity: Int = Gravity.TOP,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(activity, view, msg, gravity, 0, R.drawable.ic_hand, func)
+        }
+
+        fun defaultSnack(
+            view: View,
+            msg: String,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(activity, view, msg, Gravity.TOP, 0, R.drawable.ic_hand, func)
+        }
+
+        fun infoSnack(
+            view: View,
+            msg: String,
+            gravity: Int = Gravity.TOP,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(activity, view, msg, gravity, 4, R.drawable.ic_info, func)
+        }
+
+        fun infoSnack(
+            view: View,
+            msg: String,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(activity, view, msg, Gravity.TOP, 4, R.drawable.ic_info, func)
+        }
+
+        fun infoSnack(
+            view: View,
+            msg: String,
+            gravity: Int = Gravity.TOP,
+            icon: Int = R.drawable.ic_info,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(activity, view, msg, gravity, 4, icon, func)
+        }
+
+        fun warningSnack(
+            view: View,
+            msg: String,
+            gravity: Int = Gravity.TOP,
+            icon: Int = R.drawable.ic_warning,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(activity, view, msg, gravity, 3, icon, func)
+        }
+
+        fun warningSnack(
+            view: View,
+            msg: String,
+            gravity: Int = Gravity.TOP,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(activity, view, msg, gravity, 3, R.drawable.ic_warning, func)
+        }
+
+        fun warningSnack(
+            view: View,
+            msg: String,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(activity, view, msg, Gravity.TOP, 3, R.drawable.ic_warning, func)
+        }
+
+
+        fun errorSnack(
+            view: View,
+            msg: String,
+            gravity: Int = Gravity.TOP,
+            icon: Int = R.drawable.ic_error,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(activity, view, msg, gravity, 2, icon, func)
+        }
+
+        fun errorSnack(
+            view: View,
+            msg: String,
+            gravity: Int = Gravity.TOP,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(activity, view, msg, gravity, 2, R.drawable.ic_error, func)
+        }
+
+        fun errorSnack(
+            view: View,
+            msg: String,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(activity, view, msg, Gravity.TOP, 2, R.drawable.ic_error, func)
+        }
+
+
+        fun successSnack(
+            view: View,
+            msg: String,
+            gravity: Int = Gravity.TOP,
+            icon: Int = R.drawable.ic_task_complete,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(activity, view, msg, gravity, 1, icon, func)
+        }
+
+        fun successSnack(
+            view: View,
+            msg: String,
+            gravity: Int = Gravity.TOP,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(activity, view, msg, gravity, 1, R.drawable.ic_task_complete, func)
+        }
+
+        fun successSnack(
+            view: View,
+            msg: String,
+            func: () -> Unit = {}
+        ) {
+            MySnackBar.showSnack(
+                activity,
+                view,
+                msg,
+                Gravity.TOP,
+                1,
+                R.drawable.ic_task_complete,
+                func
+            )
+        }
+
+
+        fun snackBar(msg: String) {
+            Snackbar.make(activity.window.decorView.rootView, msg, Snackbar.LENGTH_LONG).show()
+        }
+
+        fun snackBar(view: View, msg: String) {
+            Snackbar.make(view, msg, Snackbar.LENGTH_LONG).show()
         }
 
 
