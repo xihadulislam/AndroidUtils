@@ -20,7 +20,7 @@ Step 2. Add the dependency
 
 ``` 
 dependencies {
-implementation 'com.github.xihadulislam:androidUtils:1.0.0'
+implementation 'com.github.xihadulislam:androidUtils:1.0.1'
 }
   
 ```
