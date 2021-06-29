@@ -34,6 +34,20 @@ implementation 'com.github.xihadulislam:androidUtils:1.0.3'
  AndroidUtils.init(this)
 ```
 
+### Set && get shared preferences values easily 
+
+``` 
+        AndroidUtils.sharePrefSettings.setBoolValue("key", false)
+        
+        val kBoolean = AndroidUtils.sharePrefSettings.getBoolValue("key")
+        
+        AndroidUtils.sharePrefSettings.setStringValue("key2","xihad islam")
+        
+        val xd = AndroidUtils.sharePrefSettings.getStringValue("key2");
+        
+        AndroidUtils.toast(xd)
+```
+
 
 ## Sample
 Clone this repo and check out the [app](https://github.com/xihadulislam/androidUtils/blob/master/app) module.
