@@ -30,13 +30,13 @@ implementation 'com.github.xihadulislam:androidUtils:1.0.3'
 
 ### First you have to initialize with Context
 
-``` 
+```kt
  AndroidUtils.init(this)
 ```
 
 ### Set && get shared preferences values easily 
 
-``` 
+```kt
         AndroidUtils.sharePrefSettings.setBoolValue("key", false)
         
         val kBoolean = AndroidUtils.sharePrefSettings.getBoolValue("key")
