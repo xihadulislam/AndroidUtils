@@ -37,15 +37,15 @@ dependencies {
 ### Access shared preferences values easily 
 
 ```kt
-        AndroidUtils.sharePrefSettings.setBoolValue("key", false)
+ AndroidUtils.sharePrefSettings.setBoolValue("key", false)
         
-        val kBoolean = AndroidUtils.sharePrefSettings.getBoolValue("key")
+ val kBoolean = AndroidUtils.sharePrefSettings.getBoolValue("key")
         
-        AndroidUtils.sharePrefSettings.setStringValue("key2","xihad islam")
+ AndroidUtils.sharePrefSettings.setStringValue("key2","xihad islam")
         
-        val xd = AndroidUtils.sharePrefSettings.getStringValue("key2");
+ val xd = AndroidUtils.sharePrefSettings.getStringValue("key2");
         
-        AndroidUtils.toast(xd)
+ AndroidUtils.toast(xd)
 ```
 
 
