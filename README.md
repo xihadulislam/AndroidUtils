@@ -31,7 +31,7 @@ implementation 'com.github.xihadulislam:androidUtils:1.0.3'
 
 ## Author
 
-* **Taku Semba**
+* **xihad islam**
     * **Github** - (https://github.com/xihadulislam)
     * **Twitter** - (https://twitter.com/islamxihad)
     * **Linkedin** - (https://www.linkedin.com/in/xihad-islam-315417185/)
