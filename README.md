@@ -1,5 +1,5 @@
 # Android Utils
-<img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/android_utils.jpg" alt="alt text" style="width:200;height:200">
+<img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/android_utils.png" alt="alt text" style="width:200;height:200">
 
 # To get a Git project into your build:
 
