@@ -28,7 +28,7 @@ implementation 'com.github.xihadulislam:androidUtils:1.0.3'
 
 # Documentation
 
-## First you have to initialize with Context
+### First you have to initialize with Context
 
 ``` 
  AndroidUtils.init(this)
