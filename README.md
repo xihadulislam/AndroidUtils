@@ -34,7 +34,7 @@ implementation 'com.github.xihadulislam:androidUtils:1.0.3'
  AndroidUtils.init(this)
 ```
 
-### Set && get shared preferences values easily 
+### Access shared preferences values easily 
 
 ```kt
         AndroidUtils.sharePrefSettings.setBoolValue("key", false)
