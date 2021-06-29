@@ -28,11 +28,10 @@ implementation 'com.github.xihadulislam:androidUtils:1.0.3'
 
 # Documentation
 
-## First you have to must initialisation with Context ("this" keyword)
+## First you have to initialize with Context
 
 ``` 
  AndroidUtils.init(this)
-
 ```
 
 
