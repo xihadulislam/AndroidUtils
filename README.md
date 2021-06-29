@@ -1,4 +1,4 @@
-# androidUtils
+# AndroidUtils
 A Utils library to help developers 
 
 To get a Git project into your build:
@@ -20,7 +20,10 @@ Step 2. Add the dependency
 
 ``` 
 dependencies {
-implementation 'com.github.xihadulislam:androidUtils:1.0.1'
+implementation 'com.github.xihadulislam:androidUtils:1.0.3'
 }
   
 ```
+
+
+# Documentation
