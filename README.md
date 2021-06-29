@@ -29,6 +29,9 @@ implementation 'com.github.xihadulislam:androidUtils:1.0.3'
 # Documentation
 
 
+## Sample
+Clone this repo and check out the [app](https://github.com/xihadulislam/androidUtils/blob/master/app) module.
+
 ## Author
 
 * **xihad islam**
