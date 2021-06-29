@@ -35,9 +35,10 @@ Clone this repo and check out the [app](https://github.com/xihadulislam/androidU
 ## Author
 
 * **xihad islam**
+    * **[Linkedin](https://www.linkedin.com/in/xihad-islam-315417185/)**
     * **[Github](https://github.com/xihadulislam)**
-    * **Twitter** - (https://twitter.com/islamxihad)
-    * **Linkedin** - (https://www.linkedin.com/in/xihad-islam-315417185/)
+    * **[Twitter](https://twitter.com/islamxihad)**
+    
 
 ## Licence
 ```
