@@ -1,4 +1,4 @@
-# androidUtils
+# AndroidUtils
 A Utils library to help developers 
 
 To get a Git project into your build:
