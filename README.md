@@ -28,6 +28,13 @@ implementation 'com.github.xihadulislam:androidUtils:1.0.3'
 
 # Documentation
 
+## First you have to must initialisation with Context ("this" keyword)
+
+``` 
+ AndroidUtils.init(this)
+
+```
+
 
 ## Sample
 Clone this repo and check out the [app](https://github.com/xihadulislam/androidUtils/blob/master/app) module.
