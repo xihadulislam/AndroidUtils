@@ -116,7 +116,7 @@ dependencies {
 ```
 
 
-### *This is my First built library, so if you face any issues or errors feel free to tell me.
+### This is my First built library, so if you face any issues or errors feel free to tell me.
 
 
 ## Sample project
