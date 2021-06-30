@@ -48,6 +48,8 @@ dependencies {
  AndroidUtils.toast(xd)
 ```
 
+<img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/wp.png" align="left" width="30%">
+
 
 ## Sample
 Clone this repo and check out the [app](https://github.com/xihadulislam/androidUtils/blob/master/app) module.
