@@ -34,7 +34,7 @@ dependencies {
  AndroidUtils.init(this)
 ```
 
-### Access shared preferences values easily 
+### Access shared preference easily 
 
 ```kt
  AndroidUtils.sharePrefSettings.setBoolValue("key", false)
@@ -47,6 +47,9 @@ dependencies {
         
  AndroidUtils.toast(xd)
 ```
+
+
+
 
 <img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/wp.jpeg" align="left" width="30%">
 
