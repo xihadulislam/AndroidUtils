@@ -1,5 +1,5 @@
 # Android Utils
-<img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/android_utils.jpg" alt="alt text" style="width:200;height:200">
+<img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/android_utils.png" alt="alt text" style="width:200;height:200">
 
 # To get a Git project into your build:
 
@@ -20,7 +20,7 @@ allprojects {
 
 ``` 
 dependencies {
-implementation 'com.github.xihadulislam:androidUtils:1.0.3'
+    implementation 'com.github.xihadulislam:androidUtils:1.0.3'
 }
   
 ```
@@ -30,8 +30,22 @@ implementation 'com.github.xihadulislam:androidUtils:1.0.3'
 
 ### First you have to initialize with Context
 
-``` 
+```kt
  AndroidUtils.init(this)
+```
+
+### Access shared preferences values easily 
+
+```kt
+ AndroidUtils.sharePrefSettings.setBoolValue("key", false)
+        
+ val kBoolean = AndroidUtils.sharePrefSettings.getBoolValue("key")
+        
+ AndroidUtils.sharePrefSettings.setStringValue("key2","xihad islam")
+        
+ val xd = AndroidUtils.sharePrefSettings.getStringValue("key2");
+        
+ AndroidUtils.toast(xd)
 ```
 
 
