@@ -86,19 +86,17 @@ dependencies {
             AndroidUtils.playClickSound()
         }
 
-
-        startMediaPlayer.setOnClickListener {
-          //  AndroidUtils.startMediaPlayer()
-        }
-        stopMediaPlayer.setOnClickListener {
-          //  AndroidUtils.stopMediaPlayer()
-        }
-
         showKeyboard.setOnClickListener {
           AndroidUtils.showKeyboard()
         }
 
-        startNextActivity.setOnClickListener {
+```
+
+
+#### Intent several activities just need one line code
+
+```kt
+     startNextActivity.setOnClickListener {
           AndroidUtils.startNextActivity(SecondActivity::class.java)
         }
 
@@ -109,21 +107,28 @@ dependencies {
         startFacebookIntent.setOnClickListener {
           AndroidUtils.startFacebookIntent("url")
         }
-
-        isInternetAvailable.setOnClickListener {
-          if (AndroidUtils.isInternetAvailable()){
-              AndroidUtils.toast("Available")
-          }
-        }
-
 ```
 
-#### Check Internet is Available or not
+
+#### Check Internet connection is available or not.
 
 ```kt
   if (AndroidUtils.isInternetAvailable()){
           AndroidUtils.toast("Available")
         }
+```
+
+
+#### You can Play a mediaPlayer just calling one method.
+
+```kt
+    startMediaPlayer.setOnClickListener {
+          //  AndroidUtils.startMediaPlayer()
+        }
+        stopMediaPlayer.setOnClickListener {
+          //  AndroidUtils.stopMediaPlayer()
+        }
+
 ```
 
 
