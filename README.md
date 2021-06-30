@@ -118,8 +118,18 @@ dependencies {
 
 ```
 
+#### Check Internet is Available or not
 
-### This is my First built library, so if you face any issues or errors feel free to tell me.
+```kt
+  if (AndroidUtils.isInternetAvailable()){
+          AndroidUtils.toast("Available")
+        }
+```
+
+
+
+
+### This is my First built library, so if you face any issues or errors feel free to tell me. I will update it continuously.
 
 
 ## Sample project
