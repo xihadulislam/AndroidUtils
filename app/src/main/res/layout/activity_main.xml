@@ -1,25 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/root"
-        android:gravity="center"
-        android:layout_gravity="center"
+    <ScrollView xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        tools:context=".MainActivity">
 
-        <Button
-            android:id="@+id/click"
-            android:text="Click"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="80dp"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:weightSum="2">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-</ScrollView>
+                <Button
+                    android:id="@+id/toast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Show Toast" />
+
+
+                <Button
+                    android:id="@+id/showSnack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Show SnackBar" />
+
+
+                <Button
+                    android:id="@+id/showSnackSuccess"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Success SnackBar" />
+
+                <Button
+                    android:id="@+id/showSnackInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Info SnackBar" />
+
+                <Button
+                    android:id="@+id/showSnackWarning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Warning SnackBar" />
+
+                <Button
+                    android:id="@+id/showSnackError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Error SnackBar" />
+
+                <Button
+                    android:id="@+id/playTapSound"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="play Tap Sound" />
+
+                <Button
+                    android:id="@+id/startMediaPlayer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="start Media Player" />
+
+                <Button
+                    android:id="@+id/pauseMediaPlayer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="pause  Player" />
+
+                <Button
+                    android:id="@+id/resumeMediaPlayer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="resume  Player" />
+
+                <Button
+                    android:id="@+id/stopMediaPlayer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="stop  Player" />
+
+                <Button
+                    android:id="@+id/showKeyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="show Keyboard" />
+
+                <Button
+                    android:id="@+id/hideSoftKeyBoard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="hide KeyBoard" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+
+                <Button
+                    android:id="@+id/startNextActivity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Next Activity" />
+
+                <Button
+                    android:id="@+id/afterNextActivity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" after 2s Next " />
+
+
+                <Button
+                    android:id="@+id/startFacebookIntent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" FB Intent" />
+
+                <Button
+                    android:id="@+id/startWhatsAppIntent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" WhatsApp Intent" />
+
+
+                <Button
+                    android:id="@+id/startShareIntent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Share Intent" />
+
+                <Button
+                    android:id="@+id/startFeedbackActivity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Feedback" />
+
+                <Button
+                    android:id="@+id/startRateAppActivity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" RateApp Activity" />
+
+
+                <Button
+                    android:id="@+id/isInternetAvailable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="is Internet " />
+
+                <Button
+                    android:id="@+id/loadImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="load Image" />
+
+                <Button
+                    android:id="@+id/startTwitterIntent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Twitter Intent" />
+
+                <Button
+                    android:id="@+id/getToday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="get Today" />
+
+                <Button
+                    android:id="@+id/setStatusBarColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="StatusBar Color" />
+
+                <Button
+                    android:id="@+id/setWebView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="set WebView" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
