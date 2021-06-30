@@ -134,7 +134,6 @@ dependencies {
 
 
 
-#### This is my First built library, so if you face any issues or errors feel free to tell me. I will update it continuously.
 
 
 ## Sample project
@@ -147,7 +146,8 @@ Clone this repo and check out the [app](https://github.com/xihadulislam/androidU
     * **[Github](https://github.com/xihadulislam)**
     * **[Twitter](https://twitter.com/islamxihad)**
     
-    
+ #### This is my First built library, so if you face any issues or errors feel free to tell me. I will update it continuously.
+
 
 # Share  
 > Like this project? Why not share to your friend :)  
