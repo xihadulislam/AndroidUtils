@@ -1,7 +1,7 @@
 # Android Utils
 <img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/android_utils.png" alt="alt text" style="width:200;height:200">
 
-# To get a Git project into your build:
+# To get a Git project into your build
 
 ### Step 1. Add the JitPack repository to your build file 
 
@@ -50,7 +50,7 @@ dependencies {
 
 <img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/wp.jpeg" align="left" width="30%">
 
-## Here some snippet
+## Here a Sample code snippet
 
 ```kt
   toast.setOnClickListener {
@@ -118,7 +118,7 @@ dependencies {
 
 
 
-## Sample
+## Sample project
 Clone this repo and check out the [app](https://github.com/xihadulislam/androidUtils/blob/master/app) module.
 
 ## Author
