@@ -6,18 +6,26 @@ import android.app.ActivityManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings.Secure
+import android.util.Base64
+import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -28,13 +36,16 @@ import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.xihad.androidutils.R
 import com.xihad.myapplication.utils.SharePrefSettings
-import org.jsoup.Jsoup
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 import kotlin.random.Random
 
 
@@ -85,6 +96,7 @@ class AndroidUtils {
             if (isFinish) activity.finish()
         }
 
+
         /**
          *
          *
@@ -106,6 +118,7 @@ class AndroidUtils {
             val uri = Uri.parse(url)
             activity.startActivity(Intent(Intent.ACTION_VIEW, uri))
         }
+
         /**
          *
          *
@@ -114,6 +127,7 @@ class AndroidUtils {
             val uri = Uri.parse(url)
             activity.startActivity(Intent(Intent.ACTION_VIEW, uri))
         }
+
         /**
          *
          *
@@ -157,6 +171,7 @@ class AndroidUtils {
                 toast("Facebook app not found")
             }
         }
+
         /**
          *
          *
@@ -173,6 +188,7 @@ class AndroidUtils {
                 toast("WhatsApp app not found")
             }
         }
+
         /**
          *
          *
@@ -199,6 +215,7 @@ class AndroidUtils {
             facebookIntent.data = Uri.parse(pageUrl)
             activity.startActivity(facebookIntent)
         }
+
         /**
          *
          *
@@ -212,6 +229,7 @@ class AndroidUtils {
             val shareIntent = Intent.createChooser(sendIntent, null)
             activity.startActivity(shareIntent)
         }
+
         /**
          *
          *
@@ -221,6 +239,7 @@ class AndroidUtils {
             emailIntent.data = Uri.parse("mailto:$mail")
             activity.startActivity(Intent.createChooser(emailIntent, "Send Email"))
         }
+
         /**
          *
          *
@@ -235,6 +254,7 @@ class AndroidUtils {
             }
             return jsonString
         }
+
         /**
          *
          *
@@ -250,6 +270,7 @@ class AndroidUtils {
         fun loadOfflineImage(imageView: ImageView, image: Int) {
             Glide.with(imageView.context).load(image).placeholder(image).into(imageView)
         }
+
         /**
          *
          *
@@ -549,6 +570,7 @@ class AndroidUtils {
                 }
             }
         }
+
         /**
          *
          *
@@ -566,6 +588,7 @@ class AndroidUtils {
                 it.start()
             }
         }
+
         /**
          *
          *
@@ -626,8 +649,7 @@ class AndroidUtils {
          *
          *
          */
-        fun showKeyboard() {
-            val view = activity.currentFocus
+        fun showKeyboard(view: View? = activity.currentFocus) {
             val methodManager =
                 activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             methodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
@@ -637,11 +659,11 @@ class AndroidUtils {
          *
          *
          */
-        fun hideSoftKeyBoard(view: View) {
+        fun hideSoftKeyBoard() {
             try {
                 val imm =
                     activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+                imm.hideSoftInputFromWindow(activity.currentFocus?.windowToken, 0)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -687,9 +709,210 @@ class AndroidUtils {
                     view.loadUrl(url)
                     return true
                 }
+
                 override fun onPageCommitVisible(view: WebView?, url: String?) {
                     super.onPageCommitVisible(view, url)
                 }
+            }
+        }
+
+
+        private fun isSystemPackage(pkgInfo: PackageInfo): Boolean {
+            return pkgInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0
+        }
+
+
+        @SuppressLint("QueryPermissionsNeeded")
+        fun getAllApplications(): List<ApplicationInfo> {
+            return activity.packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
+        }
+
+
+        @SuppressLint("QueryPermissionsNeeded")
+        fun getInstallApplications(): List<ApplicationInfo> {
+            val appsInst: MutableList<ApplicationInfo> = mutableListOf()
+            val apps: List<ApplicationInfo> = activity.packageManager.getInstalledApplications(0)
+            for (app in apps) {
+                if (app.flags and (ApplicationInfo.FLAG_UPDATED_SYSTEM_APP or ApplicationInfo.FLAG_SYSTEM) > 0) {
+                    // It is a system app
+                    Log.d(TAG, "getInstallApplications: ")
+                } else {
+                    // It is installed by the user
+                    appsInst.add(app)
+                }
+            }
+            return appsInst
+        }
+
+        @SuppressLint("QueryPermissionsNeeded")
+        fun getSystemApplications(): List<ApplicationInfo> {
+            val appsInst: MutableList<ApplicationInfo> = mutableListOf()
+            val apps: List<ApplicationInfo> = activity.packageManager.getInstalledApplications(0)
+            for (app in apps) {
+                if (app.flags and (ApplicationInfo.FLAG_UPDATED_SYSTEM_APP or ApplicationInfo.FLAG_SYSTEM) > 0) {
+                    // It is a system app
+                    appsInst.add(app)
+                } else {
+                    // It is installed by the user
+                    Log.d(TAG, "getSystemApplications: ")
+                }
+            }
+            return appsInst
+        }
+
+        fun postDelayed(milliSecond: Long, func: () -> Unit) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                func()
+            }, milliSecond)
+        }
+
+
+        fun imageToBase64(image: ImageView): String {
+            return Base64.encodeToString(imageToBitmap(image), Base64.NO_WRAP)
+        }
+
+        fun byteArrayToBase64(byteArray: ByteArray): String {
+            return Base64.encodeToString(byteArray, Base64.NO_WRAP)
+        }
+
+        fun imageToBitmap(image: ImageView): ByteArray {
+            val bitmap = (image.drawable as BitmapDrawable).bitmap
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+            return stream.toByteArray()
+        }
+
+
+        fun encrypt(value: String): String? {
+            val key = "aesEncryptionKey"
+            val initVector = "encryptionIntVec"
+            try {
+                val iv = IvParameterSpec(initVector.toByteArray(charset("UTF-8")))
+                val skeySpec = SecretKeySpec(key.toByteArray(charset("UTF-8")), "AES")
+                val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
+                cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv)
+                val encrypted = cipher.doFinal(value.toByteArray())
+                return Base64.encodeToString(encrypted, Base64.DEFAULT)
+            } catch (ex: java.lang.Exception) {
+                ex.printStackTrace()
+            }
+            return null
+        }
+
+        fun decrypt(value: String): String? {
+            val key = "aesEncryptionKey"
+            val initVector = "encryptionIntVec"
+            try {
+                val iv = IvParameterSpec(initVector.toByteArray(charset("UTF-8")))
+                val skeySpec = SecretKeySpec(key.toByteArray(charset("UTF-8")), "AES")
+                val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
+                cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv)
+                val original = cipher.doFinal(Base64.decode(value, Base64.DEFAULT))
+                return String(original)
+            } catch (ex: java.lang.Exception) {
+                ex.printStackTrace()
+            }
+            return null
+        }
+
+
+        fun takeScreenshotOfView(
+            view: View,
+            height: Int = view.height,
+            width: Int = view.width
+        ): Bitmap {
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            val bgDrawable = view.background
+            if (bgDrawable != null) {
+                bgDrawable.draw(canvas)
+            } else {
+                canvas.drawColor(Color.WHITE)
+            }
+            view.draw(canvas)
+            return bitmap
+        }
+
+        fun protectToScreenshot() {
+            activity.window.setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
+            )
+        }
+
+
+        @SuppressLint("HardwareIds")
+        fun getDeviceId(): String {
+            return Secure.getString(activity.contentResolver, Secure.ANDROID_ID)
+        }
+
+
+        fun getDeviceSuperInfo(): String {
+
+            var s = ""
+
+            try {
+                s = "Debug-infos:"
+                s += """
+         OS Version: ${System.getProperty("os.version")}(${Build.VERSION.INCREMENTAL})"""
+                s += """
+         OS API Level: ${Build.VERSION.SDK_INT}"""
+                s += """
+         Device: ${Build.DEVICE}"""
+                s += """
+         Model (and Product): ${Build.MODEL} (${Build.PRODUCT})"""
+                s += """
+         RELEASE: ${Build.VERSION.RELEASE}"""
+                s += """
+         BRAND: ${Build.BRAND}"""
+                s += """
+         DISPLAY: ${Build.DISPLAY}"""
+                s += """
+         CPU_ABI: ${Build.CPU_ABI}"""
+                s += """
+         CPU_ABI2: ${Build.CPU_ABI2}"""
+                s += """
+         UNKNOWN: ${Build.UNKNOWN}"""
+                s += """
+         HARDWARE: ${Build.HARDWARE}"""
+                s += """
+         Build ID: ${Build.ID}"""
+                s += """
+         MANUFACTURER: ${Build.MANUFACTURER}"""
+                s += """
+         USER: ${Build.USER}"""
+                s += """
+         HOST: ${Build.HOST}"""
+
+            } catch (e: java.lang.Exception) {
+                Log.e(TAG, "Error getting Device INFO")
+            }
+
+            return s
+        }
+
+
+        fun getDeviceName(): String {
+            val manufacturer = Build.MANUFACTURER
+            val model = Build.MODEL
+            return if (model.toLowerCase(Locale.ROOT)
+                    .startsWith(manufacturer.toLowerCase(Locale.ROOT))
+            ) {
+                capitalize(model)
+            } else {
+                capitalize(manufacturer) + " " + model
+            }
+        }
+
+        private fun capitalize(s: String?): String {
+            if (s == null || s.isEmpty()) {
+                return ""
+            }
+            val first = s[0]
+            return if (Character.isUpperCase(first)) {
+                s
+            } else {
+                Character.toUpperCase(first).toString() + s.substring(1)
             }
         }
 
