@@ -20,11 +20,11 @@ allprojects {
 
 ``` 
 dependencies {
-    implementation 'com.github.xihadulislam:androidUtils:1.0.3'
+    implementation 'com.github.xihadulislam:androidUtils:1.0.4'
 }
   
 ```
-
+[![](https://jitpack.io/v/xihadulislam/AndroidUtils.svg)](https://jitpack.io/#xihadulislam/AndroidUtils)
 
 ## Usage
 
