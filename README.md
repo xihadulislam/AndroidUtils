@@ -1,6 +1,6 @@
 # Android Utils
 <img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/android_utils.png" alt="alt text" style="width:200;height:200">
-
+[![](https://jitpack.io/v/xihadulislam/AndroidUtils.svg)](https://jitpack.io/#xihadulislam/AndroidUtils)
 # To get a Git project into your build
 
 ### Step 1. Add the JitPack repository to your build file 
