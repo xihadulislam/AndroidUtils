@@ -1,4 +1,4 @@
-package com.xihad.myapplication.utils
+package com.xihad.androidutils.utils
 
 import android.annotation.SuppressLint
 import android.content.Context

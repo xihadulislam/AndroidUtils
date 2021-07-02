@@ -27,6 +27,8 @@ object AppUtil {
         return false
     }
 
+
+
     fun isInternetAvailable(activity: Activity): Boolean {
         val connectivityManager =
             activity.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
