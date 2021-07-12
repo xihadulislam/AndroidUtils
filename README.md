@@ -54,7 +54,7 @@ dependencies {
 
 
 
-<img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/wp.jpeg" align="left" width="30%">
+<img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/wp.jpeg" align="left" >
 
 ## Here a Sample code snippet
 
