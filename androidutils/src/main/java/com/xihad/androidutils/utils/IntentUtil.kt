@@ -6,7 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import com.xihad.androidutils.AndroidUtils.Companion.toast
+import com.xihad.androidutils.AndroidUtils
 
 object IntentUtil {
 
@@ -16,12 +16,12 @@ object IntentUtil {
      *
      */
 
-    fun startNextActivity(activity: Activity,cls: Class<*>?, isFinish: Boolean = false) {
+    fun startNextActivity(activity: Activity, cls: Class<*>?, isFinish: Boolean = false) {
         if (AppUtil.isOpenRecently()) return
         Intent(activity, cls).also {
-             activity.startActivity(it)
+            activity.startActivity(it)
         }
-        if (isFinish)  activity.finish()
+        if (isFinish) activity.finish()
     }
 
 
@@ -29,12 +29,17 @@ object IntentUtil {
      *
      *
      */
-    fun afterNextActivity(activity: Activity,milliSecond: Long, cls: Class<*>?, isFinish: Boolean = false) {
+    fun afterNextActivity(
+        activity: Activity,
+        milliSecond: Long,
+        cls: Class<*>?,
+        isFinish: Boolean = false
+    ) {
         Handler(Looper.getMainLooper()).postDelayed({
             Intent(activity, cls).also {
-                 activity.startActivity(it)
+                activity.startActivity(it)
             }
-            if (isFinish)  activity.finish()
+            if (isFinish) activity.finish()
         }, milliSecond)
     }
 
@@ -42,18 +47,18 @@ object IntentUtil {
      *
      *
      */
-    fun startPrivacyActivity(activity: Activity,url: String) {
+    fun startPrivacyActivity(activity: Activity, url: String) {
         val uri = Uri.parse(url)
-         activity.startActivity(Intent(Intent.ACTION_VIEW, uri))
+        activity.startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 
     /**
      *
      *
      */
-    fun startPlayStoreActivity(activity: Activity,url: String) {
+    fun startPlayStoreActivity(activity: Activity, url: String) {
         val uri = Uri.parse(url)
-         activity.startActivity(Intent(Intent.ACTION_VIEW, uri))
+        activity.startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 
     /**
@@ -62,20 +67,20 @@ object IntentUtil {
      */
     fun startRateAppActivity(activity: Activity) {
         try {
-             activity.startActivity(
+            activity.startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
                     Uri.parse("https://play.google.com/store/apps/details?id=${activity.applicationContext.packageName}")
                 )
             )
         } catch (e: ActivityNotFoundException) {
-             activity.startActivity(
+            activity.startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
                     Uri.parse(
                         String.format(
                             "https://play.google.com/store/apps/details?id=",
-                             activity.applicationContext.packageName
+                            activity.applicationContext.packageName
                         )
                     )
                 )
@@ -87,16 +92,16 @@ object IntentUtil {
      *
      *
      */
-    fun startFacebookIntent(activity: Activity,link: String) {
+    fun startFacebookIntent(activity: Activity, link: String) {
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.putExtra(Intent.EXTRA_TEXT, link)
         sendIntent.type = "text/plain"
         sendIntent.setPackage("com.facebook.katana")
         if (sendIntent.resolveActivity(activity.packageManager) != null) {
-             activity.startActivity(sendIntent)
+            activity.startActivity(sendIntent)
         } else {
-            toast("Facebook app not found")
+            AndroidUtils.init(activity).toast("Facebook app not found")
         }
     }
 
@@ -104,42 +109,42 @@ object IntentUtil {
      *
      *
      */
-    fun startWhatsAppIntent(activity: Activity,link: String) {
+    fun startWhatsAppIntent(activity: Activity, link: String) {
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.putExtra(Intent.EXTRA_TEXT, link)
         sendIntent.type = "text/plain"
         sendIntent.setPackage("com.whatsapp")
         if (sendIntent.resolveActivity(activity.packageManager) != null) {
-             activity.startActivity(sendIntent)
+            activity.startActivity(sendIntent)
         } else {
-             toast("WhatsApp app not found")
+            AndroidUtils.init(activity).toast("WhatsApp app not found")
         }
     }
 
 
-    fun startTwitterIntent(activity: Activity,link: String) {
+    fun startTwitterIntent(activity: Activity, link: String) {
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.putExtra(Intent.EXTRA_TEXT, link)
         sendIntent.type = "text/plain"
         sendIntent.setPackage("com.twitter.android")
         if (sendIntent.resolveActivity(activity.packageManager) != null) {
-             activity.startActivity(sendIntent)
+            activity.startActivity(sendIntent)
         } else {
-             toast("twitter app not found")
+            AndroidUtils.init(activity).toast("twitter app not found")
         }
     }
 
 
-    fun openFBPageByUrl(activity: Activity,pageUrl: String) {
+    fun openFBPageByUrl(activity: Activity, pageUrl: String) {
         val facebookIntent = Intent(Intent.ACTION_VIEW)
         facebookIntent.data = Uri.parse(pageUrl)
         activity.startActivity(facebookIntent)
     }
 
 
-    fun startShareIntent(activity: Activity,mag: String) {
+    fun startShareIntent(activity: Activity, mag: String) {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, mag)
@@ -150,10 +155,10 @@ object IntentUtil {
     }
 
 
-    fun startFeedbackActivity(activity: Activity,mail: String) {
+    fun startFeedbackActivity(activity: Activity, mail: String) {
         val emailIntent = Intent(Intent.ACTION_SENDTO)
         emailIntent.data = Uri.parse("mailto:$mail")
-       activity.startActivity(Intent.createChooser(emailIntent, "Send Email"))
+        activity.startActivity(Intent.createChooser(emailIntent, "Send Email"))
     }
 
 }

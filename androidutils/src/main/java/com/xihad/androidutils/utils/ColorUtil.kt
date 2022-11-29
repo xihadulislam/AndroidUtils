@@ -2,10 +2,13 @@ package com.xihad.androidutils.utils
 
 import android.app.Activity
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.core.content.ContextCompat
 
 object ColorUtil {
+
+
 
     fun setStatusBarColor(activity: Activity,color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -35,4 +35,8 @@ object ImageUtil {
     }
 
 
+    fun byteArrayToBase64(byteArray: ByteArray): String =
+        Base64.encodeToString(byteArray, Base64.NO_WRAP)
+
+
 }

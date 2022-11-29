@@ -6,16 +6,13 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.text.TextUtils
 
-class SharePrefSettings/*
-     * A private Constructor prevents any other class from instantiating.
-     */
-private constructor(private val mContext: Context) {
+class SharePrefSettings private constructor(mContext: Context) {
 
-    val preference: SharedPreferences
+    private val preference: SharedPreferences
     private var mEditor: SharedPreferences.Editor? = null
     private var mEditorOpened = false
 
-    val preferenceEditor: SharedPreferences.Editor?
+    private val preferenceEditor: SharedPreferences.Editor?
         get() {
             if (mEditorOpened) {
                 return mEditor
@@ -26,7 +23,7 @@ private constructor(private val mContext: Context) {
         }
 
     init {
-        preference = getSharedPreferenceFile(mContext, "new_mypref")
+        preference = getSharedPreferenceFile(mContext, "app_pref")
     }
 
     /**
@@ -89,6 +86,7 @@ private constructor(private val mContext: Context) {
     fun getIntValue(key: String): Int {
         return preference.getInt(getSecureText(key), 0)
     }
+
     // int
     fun getIntValue(key: String, defaultvalue: Int): Int {
         return preference.getInt(getSecureText(key), defaultvalue)
@@ -179,19 +177,19 @@ private constructor(private val mContext: Context) {
 
             when (val itemObject = pair.value) {
                 is Int -> {
-                    this.setIntValue(getSecureText(pair.key), itemObject )
+                    this.setIntValue(getSecureText(pair.key), itemObject)
                 }
                 is String -> {
-                    this.setStringValue(getSecureText(pair.key), getSecureText(itemObject ))
+                    this.setStringValue(getSecureText(pair.key), getSecureText(itemObject))
                 }
                 is Boolean -> {
-                    this.setBoolValue(getSecureText(pair.key), itemObject )
+                    this.setBoolValue(getSecureText(pair.key), itemObject)
                 }
                 is Long -> {
-                    this.setLongValue(getSecureText(pair.key), itemObject )
+                    this.setLongValue(getSecureText(pair.key), itemObject)
                 }
                 is Double -> {
-                    this.setDoubleValue(getSecureText(pair.key), itemObject )
+                    this.setDoubleValue(getSecureText(pair.key), itemObject)
                 }
             }
 
@@ -216,7 +214,7 @@ private constructor(private val mContext: Context) {
         return encrypted_data
     }
 
-    fun clearData(){
+    fun clearData() {
         val editor = preference.edit()
         editor.clear()
         editor.apply()
@@ -225,6 +223,7 @@ private constructor(private val mContext: Context) {
     companion object {
         @SuppressLint("StaticFieldLeak")
         private var appSettingSingleton: SharePrefSettings? = null
+
         /* Static 'instance' method */
         fun getInstance(_mContext: Context): SharePrefSettings? {
             if (appSettingSingleton == null)
@@ -232,7 +231,7 @@ private constructor(private val mContext: Context) {
                     SharePrefSettings(
                         _mContext
                     )
-                return appSettingSingleton
+            return appSettingSingleton
         }
     }
 }
