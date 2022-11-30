@@ -7,8 +7,18 @@ import java.io.IOException
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
+import java.util.regex.Pattern
 
 object Utils {
+
+
+    fun validateEmailAddress(email: String?): Boolean {
+        val address =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE)
+        val matcher = email?.let { address.matcher(it) }
+        return matcher?.find() ?: false
+    }
+
 
     fun postDelayed(milliSecond: Long, func: () -> Unit) {
         Handler(Looper.getMainLooper()).postDelayed({

@@ -51,6 +51,8 @@ class AndroidUtils private constructor() {
 
         fun getDebounceUtils(): DebounceUtils = DebounceUtils
 
+        fun getPaymentUtils(): PaymentUtils = PaymentUtils
+
 
         /**
          * Quick Access methods
@@ -80,6 +82,8 @@ class AndroidUtils private constructor() {
         fun getJsonFromAsset(context: Context, fileName: String) =
             Utils.getJsonFromAsset(context, fileName)
 
+        fun validateEmailAddress(email: String?) = Utils.validateEmailAddress(email)
+
 
         /**
          * ApplicationUtil
@@ -104,6 +108,19 @@ class AndroidUtils private constructor() {
         fun encrypt(value: String) = EncryptionUtil.encrypt(value)
         fun decrypt(value: String) = EncryptionUtil.decrypt(value)
 
+
+        /**
+         * PaymentUtils
+         */
+        fun getIncludingTax(total: Double, tax: Double) = PaymentUtils.getIncludingTax(total, tax)
+
+        fun getExcludingTax(total: Double, tax: Double) = PaymentUtils.getExcludingTax(total, tax)
+
+        fun twoDigitDouble(value: Double) = PaymentUtils.twoDigitDouble(value)
+
+        fun twoDigitString(value: Double) = PaymentUtils.twoDigitString(value)
+
+        fun stringToNumber(inputNumber: String) = PaymentUtils.stringToNumber(inputNumber)
 
 
         /**
