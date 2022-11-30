@@ -23,7 +23,7 @@ allprojects {
 
 ``` 
 dependencies {
-    implementation 'com.github.xihadulislam:androidUtils:1.0.5'
+    implementation 'com.github.xihadulislam:androidUtils:1.0.0'
 }
   
 ```
@@ -31,11 +31,7 @@ dependencies {
 
 ## Usage
 
-### First you have to initialize with Context
 
-```kt
- AndroidUtils.init(this)
-```
 
 ### Access shared preference easily 
 
