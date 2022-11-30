@@ -40,15 +40,17 @@ dependencies {
 ### Access shared preference easily 
 
 ```kt
- AndroidUtils.sharePrefSettings.setBoolValue("key", false)
-        
- val kBoolean = AndroidUtils.sharePrefSettings.getBoolValue("key")
-        
- AndroidUtils.sharePrefSettings.setStringValue("key2","xihad islam")
-        
- val xd = AndroidUtils.sharePrefSettings.getStringValue("key2");
-        
- AndroidUtils.toast(xd)
+       val sharePrefSettings = AndroidUtils.getSharePrefSetting(this);
+
+        sharePrefSettings.setBoolValue("key", false)
+
+        val kBoolean = sharePrefSettings.getBoolValue("key")
+
+        sharePrefSettings.setStringValue("key2", "xihad islam")
+
+        val xd = sharePrefSettings.getStringValue("key2");
+        AndroidUtils.toast(this, xd)
+
 ```
 
 
@@ -60,38 +62,31 @@ dependencies {
 
 ```kt
   toast.setOnClickListener {
-            AndroidUtils.toast("show something")
+            AndroidUtils.toast(this, "show something")
         }
+
         showSnack.setOnClickListener {
-            AndroidUtils.snackBar("show something")
+            AndroidUtils.getSnackBar(this).snackBar("show something")
         }
 
         showSnackSuccess.setOnClickListener {
-            AndroidUtils.successSnack(root, "show something")
+            AndroidUtils.getSnackBar(this).successSnack(root, "show something")
         }
 
         showSnackInfo.setOnClickListener {
-            AndroidUtils.infoSnack(root, "show something", Gravity.BOTTOM, fun() {
-                AndroidUtils.toast("click")
+            AndroidUtils.getSnackBar(this).infoSnack(root, "show something", Gravity.BOTTOM, fun() {
+                AndroidUtils.toast(this, "click")
             })
         }
 
         showSnackWarning.setOnClickListener {
-            AndroidUtils.warningSnack(root, "show something")
+            AndroidUtils.getSnackBar(this).warningSnack(root, "show something")
         }
 
         showSnackError.setOnClickListener {
-            AndroidUtils.errorSnack(root, "show something")
+            AndroidUtils.getSnackBar(this).errorSnack(root, "show something")
         }
 
-
-        playTapSound.setOnClickListener {
-            AndroidUtils.playClickSound()
-        }
-
-        showKeyboard.setOnClickListener {
-          AndroidUtils.showKeyboard()
-        }
 
 ```
 
@@ -99,41 +94,37 @@ dependencies {
 #### Intent several activities just need one line code
 
 ```kt
-     startNextActivity.setOnClickListener {
-          AndroidUtils.startNextActivity(SecondActivity::class.java)
+           startNextActivity.setOnClickListener {
+            AndroidUtils.getIntent().startNextActivity(this, SecondActivity::class.java)
         }
 
         afterNextActivity.setOnClickListener {
-          AndroidUtils.afterNextActivity(2000,SecondActivity::class.java)
+            AndroidUtils.getIntent().afterNextActivity(this, 2000, SecondActivity::class.java)
         }
 
         startFacebookIntent.setOnClickListener {
-          AndroidUtils.startFacebookIntent("url")
+            AndroidUtils.getIntent().startFacebookIntent(this, "url")
         }
+
+      
 ```
 
 
 #### Check Internet connection is available or not.
 
 ```kt
-  if (AndroidUtils.isInternetAvailable()){
-          AndroidUtils.toast("Available")
-        }
+    if (AndroidUtils.getAppUtil().isInternetAvailable(this)) {
+                AndroidUtils.toast(this, "Available")
+            }
 ```
 
 
 #### You can Play a mediaPlayer just calling one method.
 
 ```kt
-    startMediaPlayer.setOnClickListener {
-          //  AndroidUtils.startMediaPlayer()
-        }
-        stopMediaPlayer.setOnClickListener {
-          //  AndroidUtils.stopMediaPlayer()
-        }
+    
 
 ```
-
 
 
 
