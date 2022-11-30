@@ -23,7 +23,6 @@ class AndroidUtils private constructor() {
 
         fun getSnackBar(activity: Activity): MySnackBar = MySnackBar.init(activity)
 
-
         fun getMediaPlayer(): MediaPlayerUtil = MediaPlayerUtil
 
         fun getColorUtil(): ColorUtil = ColorUtil
