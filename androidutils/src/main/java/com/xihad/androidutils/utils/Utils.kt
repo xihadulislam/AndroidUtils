@@ -1,6 +1,6 @@
 package com.xihad.androidutils.utils
 
-import android.app.Activity
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import java.io.IOException
@@ -35,10 +35,10 @@ object Utils {
     }
 
 
-    fun getJsonFromAsset(activity: Activity, fileName: String): String {
+    fun getJsonFromAsset(context: Context, fileName: String): String {
         var jsonString = ""
         try {
-            jsonString = activity.assets.open(fileName).bufferedReader().use { it.readText() }
+            jsonString = context.assets.open(fileName).bufferedReader().use { it.readText() }
         } catch (ioException: IOException) {
             ioException.printStackTrace()
             return jsonString
@@ -48,7 +48,7 @@ object Utils {
 
 
     fun uId(): String {
-        var orderId = ""
+        var id = ""
         val tz = TimeZone.getTimeZone("Europe/London")
         val cal = Calendar.getInstance(tz)
         val year = cal[Calendar.YEAR]
@@ -83,10 +83,10 @@ object Utils {
                 + "" + newMinute + "" + newSecond
                 + "" + oneChar + "" + twoChar
                 ).also {
-                orderId = it
+                id = it
             }
 
-        return orderId
+        return id
     }
 
 

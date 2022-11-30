@@ -11,7 +11,6 @@ class ExampleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_example)
 
-        AndroidUtils.getSharePrefSetting(this).getDoubleValue("total")
 
     }
 }

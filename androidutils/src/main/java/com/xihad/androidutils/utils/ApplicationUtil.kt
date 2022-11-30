@@ -17,13 +17,13 @@ object ApplicationUtil {
         return pkgInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0
     }
 
-     fun isAppOnForeground(activity: Activity): Boolean {
+     fun isAppOnForeground(context: Context): Boolean {
         val activityManager =
-            activity.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val appProcesses = activityManager.runningAppProcesses ?: return false
         for (appProcess in appProcesses) {
             if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND &&
-                appProcess.processName == activity.applicationContext.packageName
+                appProcess.processName == context.applicationContext.packageName
             ) {
                 return true
             }
@@ -32,14 +32,14 @@ object ApplicationUtil {
     }
 
     @SuppressLint("QueryPermissionsNeeded")
-    fun getAllApplications(activity: Activity): List<ApplicationInfo> {
-        return activity.packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
+    fun getAllApplications(context: Context): List<ApplicationInfo> {
+        return context.packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
     }
 
     @SuppressLint("QueryPermissionsNeeded")
-    fun getInstallApplications(activity: Activity): List<ApplicationInfo> {
+    fun getInstallApplications(context: Context): List<ApplicationInfo> {
         val appsInst: MutableList<ApplicationInfo> = mutableListOf()
-        val apps: List<ApplicationInfo> = activity.packageManager.getInstalledApplications(0)
+        val apps: List<ApplicationInfo> = context.packageManager.getInstalledApplications(0)
         for (app in apps) {
             if (app.flags and (ApplicationInfo.FLAG_UPDATED_SYSTEM_APP or ApplicationInfo.FLAG_SYSTEM) > 0) {
                 // It is a system app
@@ -54,9 +54,9 @@ object ApplicationUtil {
 
 
     @SuppressLint("QueryPermissionsNeeded")
-    fun getSystemApplications(activity: Activity): List<ApplicationInfo> {
+    fun getSystemApplications(context: Context): List<ApplicationInfo> {
         val appsInst: MutableList<ApplicationInfo> = mutableListOf()
-        val apps: List<ApplicationInfo> = activity.packageManager.getInstalledApplications(0)
+        val apps: List<ApplicationInfo> = context.packageManager.getInstalledApplications(0)
         for (app in apps) {
             if (app.flags and (ApplicationInfo.FLAG_UPDATED_SYSTEM_APP or ApplicationInfo.FLAG_SYSTEM) > 0) {
                 // It is a system app
@@ -71,7 +71,7 @@ object ApplicationUtil {
 
 
     @SuppressLint("SetJavaScriptEnabled")
-     fun setWebView(response: String, webView: WebView) {
+     fun setWebView(url: String, webView: WebView) {
 
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
@@ -80,7 +80,7 @@ object ApplicationUtil {
             }
         }
         webView.settings.javaScriptEnabled = true
-        webView.loadUrl(response)
+        webView.loadUrl(url)
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 view.loadUrl(url)
