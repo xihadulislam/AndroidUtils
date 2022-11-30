@@ -11,7 +11,7 @@ class ExampleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_example)
 
-        AndroidUtils.init(this).getDebounceUtils()
+        AndroidUtils.getDebounceUtils()
 
     }
 }

@@ -101,7 +101,7 @@ object IntentUtil {
         if (sendIntent.resolveActivity(activity.packageManager) != null) {
             activity.startActivity(sendIntent)
         } else {
-            AndroidUtils.init(activity).toast("Facebook app not found")
+            AndroidUtils.toast(activity, "Facebook app not found")
         }
     }
 
@@ -118,7 +118,7 @@ object IntentUtil {
         if (sendIntent.resolveActivity(activity.packageManager) != null) {
             activity.startActivity(sendIntent)
         } else {
-            AndroidUtils.init(activity).toast("WhatsApp app not found")
+            AndroidUtils.toast(activity,"WhatsApp app not found")
         }
     }
 
@@ -132,7 +132,7 @@ object IntentUtil {
         if (sendIntent.resolveActivity(activity.packageManager) != null) {
             activity.startActivity(sendIntent)
         } else {
-            AndroidUtils.init(activity).toast("twitter app not found")
+            AndroidUtils.toast(activity,"twitter app not found")
         }
     }
 

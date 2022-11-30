@@ -1,10 +1,9 @@
 package com.xd.androidutils
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
-import android.widget.Button
-import com.xihad.androidutils.utils.AndroidUtils
+import androidx.appcompat.app.AppCompatActivity
+import com.xihad.androidutils.AndroidUtils
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
