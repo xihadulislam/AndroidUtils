@@ -1,7 +1,9 @@
 package com.xihad.androidutils.utils
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.core.content.ContextCompat
@@ -9,8 +11,13 @@ import androidx.core.content.ContextCompat
 object ColorUtil {
 
 
+    fun getColoredDrawable(context: Context, drawableRef: Int, color: Int): Drawable {
+        val drawable = ContextCompat.getDrawable(context, drawableRef)!!.mutate()
+        drawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+        return drawable
+    }
 
-    fun setStatusBarColor(activity: Activity,color: Int) {
+    fun setStatusBarColor(activity: Activity, color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity.window.statusBarColor = ContextCompat.getColor(activity, color)
         }

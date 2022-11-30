@@ -11,7 +11,7 @@ object AppUtil {
     var mLastClickTime = 0L
 
     fun isOpenRecently(): Boolean {
-        if(SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
             return true
         }
         mLastClickTime = SystemClock.elapsedRealtime()
@@ -20,7 +20,7 @@ object AppUtil {
 
     var lastClickTime = 0L
     fun isOpenLastSecond(): Boolean {
-        if(SystemClock.elapsedRealtime() - lastClickTime < 1000){
+        if (SystemClock.elapsedRealtime() - lastClickTime < 1000) {
             return true
         }
         lastClickTime = SystemClock.elapsedRealtime()
@@ -28,10 +28,9 @@ object AppUtil {
     }
 
 
-
-    fun isInternetAvailable(activity: Activity): Boolean {
+    fun isInternetAvailable(context: Context): Boolean {
         val connectivityManager =
-            activity.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         var result = false
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -60,7 +59,6 @@ object AppUtil {
 
         return result
     }
-
 
 
 }
