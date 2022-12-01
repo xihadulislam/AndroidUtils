@@ -53,6 +53,8 @@ class AndroidUtils private constructor() {
 
         fun getPaymentUtils(): PaymentUtils = PaymentUtils
 
+        fun getNumberUtils(): NumberUtils = NumberUtils
+
 
         /**
          * Quick Access methods
@@ -121,6 +123,32 @@ class AndroidUtils private constructor() {
         fun twoDigitString(value: Double) = PaymentUtils.twoDigitString(value)
 
         fun stringToNumber(inputNumber: String) = PaymentUtils.stringToNumber(inputNumber)
+
+
+        /**
+         *  CurrencyUtils
+         *
+         */
+
+        fun getCurrencyCode(countryCode: String) = CurrencyUtils.getCurrencyCode(countryCode)
+
+        fun getCurrencySymbol(countryCode: String) = CurrencyUtils.getCurrencySymbol(countryCode)
+
+        fun getCountryCode(countryName: String) = CurrencyUtils.getCountryCode(countryName)
+
+
+        /**
+         *  NumberUtils
+         */
+        fun numberToWords(number: Long) = NumberUtils.numberToWords(number)
+
+        fun numberInBangla(number: String) = NumberUtils.numberInBangla(number)
+
+        fun getDigitBanglaFromEnglish(number: String) =
+            NumberUtils.getDigitBanglaFromEnglish(number)
+
+        fun getDigitEnglishFromBangla(number: String) =
+            NumberUtils.getDigitEnglishFromBangla(number)
 
 
         /**

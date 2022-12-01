@@ -6,6 +6,7 @@ import com.xihad.androidutils.AndroidUtils
 import com.xihad.androidutils.R
 import com.xihad.androidutils.effect.applyClickEffect
 import com.xihad.androidutils.utils.DebounceUtils
+import com.xihad.androidutils.utils.PaymentUtils.twoDigitString
 import kotlinx.android.synthetic.main.activity_example.*
 
 class ExampleActivity : AppCompatActivity() {
