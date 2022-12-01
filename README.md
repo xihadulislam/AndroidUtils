@@ -23,7 +23,7 @@ allprojects {
 
 ``` 
 dependencies {
-    implementation 'com.github.xihadulislam:androidUtils:1.0.0'
+    implementation 'com.github.xihadulislam:androidUtils:2.0.2'
 }
   
 ```
