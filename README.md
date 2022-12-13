@@ -29,7 +29,7 @@ dependencies {
 ```
 [![](https://jitpack.io/v/xihadulislam/AndroidUtils.svg)](https://jitpack.io/#xihadulislam/AndroidUtils)
 
-## Usage
+## Usage 
 
 
 
@@ -52,7 +52,7 @@ dependencies {
 
 
 
-<img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/wp.jpeg" >
+[//]: # (<img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/wp.jpeg" >)
 
 ## Here a Sample code snippet
 

@@ -18,8 +18,6 @@ object PaymentUtils {
     }
 
 
-
-
     @SuppressLint("DefaultLocale")
     fun twoDigitDouble(value: Double): Double {
         var newVal = 0.00
@@ -159,8 +157,7 @@ object PaymentUtils {
 
 }
 
-class CashModel {
-    var labelAmount = ""
-    var amount = 0.0
-    var isSelected = false
-}
+data class CashModel(
+    var labelAmount: String = "",
+    var amount: Double = 0.0
+)
