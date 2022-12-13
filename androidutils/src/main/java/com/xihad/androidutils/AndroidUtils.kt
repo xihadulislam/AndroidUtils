@@ -7,6 +7,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.webkit.WebView
 import android.widget.Toast
+import com.xihad.androidutils.effect.ClickEffect
 import com.xihad.androidutils.utils.*
 
 class AndroidUtils private constructor() {
@@ -85,6 +86,8 @@ class AndroidUtils private constructor() {
             Utils.getJsonFromAsset(context, fileName)
 
         fun validateEmailAddress(email: String?) = Utils.validateEmailAddress(email)
+
+        fun applyClickEffect(view: View) = Utils.applyClickEffect(view);
 
 
         /**

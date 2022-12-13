@@ -3,6 +3,8 @@ package com.xihad.androidutils.utils
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.view.View
+import com.xihad.androidutils.effect.ClickEffect
 import java.io.IOException
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -97,6 +99,11 @@ object Utils {
             }
 
         return id
+    }
+
+
+    fun applyClickEffect(view: View) {
+        ClickEffect(view)
     }
 
 
