@@ -49,6 +49,18 @@ dependencies {
 
 ```
 
+
+
+### Make a click effect of all view 
+
+```kt
+
+   AndroidUtils.applyClickEffect(view)
+   view.setOnClickListener{}
+
+```
+
+
 ### Generate a random unique uuid in ine line
 
 ```kt
@@ -118,7 +130,6 @@ dependencies {
 
 ```
 
-
 ### Encryption Utils
 
 ```kt
@@ -130,9 +141,24 @@ dependencies {
 
 ```
 
+### Application Utils
 
+```kt
+     
+  AndroidUtils.setWebView(url, webView) // load webview
+  
+  val systemApplications : List<ApplicationInfo> = ApplicationUtil.getSystemApplications(context)
+  
+  val installApplications : List<ApplicationInfo> = ApplicationUtil.getInstallApplications(context)
+  
+  val allApplications : List<ApplicationInfo> = ApplicationUtil.getAllApplications(context)
+  
+  val is = ApplicationUtil.isAppOnForeground(context)
+  
+  val isPack= ApplicationUtil.isSystemPackage(context)
+  
 
-
+```
 
 [//]: # (<img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/wp.jpeg" >)
 
@@ -185,8 +211,6 @@ dependencies {
 
       
 ```
-
-
 
 ## Sample project
 

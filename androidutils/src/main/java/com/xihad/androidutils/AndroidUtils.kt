@@ -88,7 +88,7 @@ class AndroidUtils private constructor() {
 
         fun validateEmailAddress(email: String?) = Utils.validateEmailAddress(email)
 
-        fun applyClickEffect(view: View) = Utils.applyClickEffect(view);
+        fun applyClickEffect(view: View) = Utils.applyClickEffect(view)
 
 
         /**
