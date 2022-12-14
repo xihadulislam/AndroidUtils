@@ -1,12 +1,12 @@
 # Android Utils
+
 <img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/android_utils.png" alt="alt text" style="width:200;height:200">
 
 [![](https://jitpack.io/v/xihadulislam/AndroidUtils.svg)](https://jitpack.io/#xihadulislam/AndroidUtils)
 
-
 # To get a Git project into your build
 
-### Step 1. Add the JitPack repository to your build file 
+### Step 1. Add the JitPack repository to your build file
 
 Add it in your root build.gradle at the end of repositories:
 
@@ -27,25 +27,94 @@ dependencies {
 }
   
 ```
+
 [![](https://jitpack.io/v/xihadulislam/AndroidUtils.svg)](https://jitpack.io/#xihadulislam/AndroidUtils)
 
-## Usage 
+## Usage
 
-
-
-### Access shared preference easily 
+### Access shared preference easily
 
 ```kt
-       val sharePrefSettings = AndroidUtils.getSharePrefSetting(this);
+      val sharePrefSettings = AndroidUtils.getSharePrefSetting(this);
 
         sharePrefSettings.setBoolValue("key", false)
-
         val kBoolean = sharePrefSettings.getBoolValue("key")
+        
+        Log.d(TAG, "onCreate: $kBoolean")
 
         sharePrefSettings.setStringValue("key2", "xihad islam")
+        val xd = sharePrefSettings.getStringValue("key2")
+        
+        Log.d(TAG, "onCreate: $xd")
 
-        val xd = sharePrefSettings.getStringValue("key2");
-        AndroidUtils.toast(this, xd)
+```
+
+### Generate a random unique uuid in ine line
+
+```kt
+        val uId: String = AndroidUtils.uId() // example: 42N35260Y390345AM
+
+```
+
+### Check your Internet connection is Available or not
+
+```kt
+        
+        AndroidUtils.isInternetAvailable(context) // it will return true or false
+
+```
+
+### Screenshot Utils
+
+#### take Screenshot Of a View
+
+```kt
+        
+         var image : Bitmap = AndroidUtils.takeScreenshotOfView(rootView,200,200) // height & width is optional 
+         
+         var image2 : Bitmap = AndroidUtils.takeScreenshotOfView(rootView) // height & width is optional 
+
+```
+
+#### protect To Take Screenshot of a Screen
+
+```kt
+       AndroidUtils.protectToScreenshot(this) // 
+
+```
+
+### Number Utils
+
+```kt
+        val numberUtils: NumberUtils = AndroidUtils.getNumberUtils()
+        numberUtils.numberToWords(100)
+        numberUtils.numberInBangla("100")
+        
+        // or you can use it with Quick Access
+        
+        val word = AndroidUtils.numberToWords(100)
+        
+        val banglaNumber = AndroidUtils.numberInBangla("12-10-2022")
+        
+        val banNumber = AndroidUtils.getDigitBanglaFromEnglish("1234")
+        
+        val enNumber = AndroidUtils.getDigitEnglishFromBangla(banNumber)
+
+```
+
+### Payment Utils
+
+```kt
+     
+        val includingTax = AndroidUtils.getIncludingTax(100,20)
+        
+        val excludingTax = AndroidUtils.getExcludingTax(100,25)
+        
+        val num = AndroidUtils.twoDigitDouble(14.4444334343)
+        
+        val str:String = AndroidUtils.twoDigitString(14.364433)
+        
+        val num = AndroidUtils.stringToNumber("13")
 
 ```
 
@@ -86,7 +155,6 @@ dependencies {
 
 ```
 
-
 #### Intent several activities just need one line code
 
 ```kt
@@ -105,7 +173,6 @@ dependencies {
       
 ```
 
-
 #### Check Internet connection is available or not.
 
 ```kt
@@ -114,7 +181,6 @@ dependencies {
             }
 ```
 
-
 #### You can Play a mediaPlayer just calling one method.
 
 ```kt
@@ -122,12 +188,10 @@ dependencies {
 
 ```
 
-
-
-
-
 ## Sample project
-Clone this repo and check out the [app](https://github.com/xihadulislam/androidUtils/blob/master/app) module.
+
+Clone this repo and check out
+the [app](https://github.com/xihadulislam/androidUtils/blob/master/app) module.
 
 ## Author
 
@@ -135,18 +199,17 @@ Clone this repo and check out the [app](https://github.com/xihadulislam/androidU
     * **[Linkedin](https://www.linkedin.com/in/xihad-islam-315417185/)**
     * **[Github](https://github.com/xihadulislam)**
     * **[Twitter](https://twitter.com/islamxihad)**
-    
- #### This is my First built library, so if you face any issues or errors feel free to tell me. I will update it continuously.
 
+#### This is my First built library, so if you face any issues or errors feel free to tell me. I will update it continuously.
 
-# Share  
-> Like this project? Why not share to your friend :)  
->   
+# Share
+
+> Like this project? Why not share to your friend :)
+>
 > <a href="https://twitter.com/intent/tweet?text=Look%20at%20this%20nice%20project,%20a%20of%20Android%20Utils%20app.%20Made%20by%20@xihadulislam%20Url%20https://github.com/xihadulislam/androidUtils" target="_blank" title="share to twitter" style="width:100%"><img src="http://i.imgur.com/GlSWEr7.png" title="share to twitter"/></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.facebook.com/sharer/sharer.php?u=https://github.com/xihadulislam/androidUtils" target="_blank" title="share to facebook" style="width:100%"><img src="http://i.imgur.com/0evE2QJ.png" title="share to facebook"/></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://plus.google.com/share?url=https://github.com/xihadulislam/androidUtils" target="_blank" title="share to google+" style="width:100%"><img src="http://i.imgur.com/zvDBPqj.png" title="share to google+"/></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://service.weibo.com/share/share.php?searchPic=false&title=Android Utils &url=https://github.com/xihadulislam/androidUtils&utm_content=share_button&utm_campaign=post_show&utm_medium=github&utm_source=weibo" target="_blank" title="share to sina weibo" style="width:100%"><img src="http://i.imgur.com/pH9q4qu.png" title="share to sina weibo"/></a>
 
-
-
 ## Licence
+
 ```
 Copyright 2021 @xihad islam.
 

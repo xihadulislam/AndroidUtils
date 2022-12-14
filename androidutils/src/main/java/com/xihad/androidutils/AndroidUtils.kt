@@ -61,6 +61,7 @@ class AndroidUtils private constructor() {
          * Quick Access methods
          */
         fun uId() = Utils.uId()
+
         fun isInternetAvailable(context: Context) = AppUtil.isInternetAvailable(context)
 
 
