@@ -52,7 +52,7 @@ dependencies {
 ### Generate a random unique uuid in ine line
 
 ```kt
-        val uId: String = AndroidUtils.uId() // example: 42N35260Y390345AM
+   val uId: String = AndroidUtils.uId() // example: 42N35260Y390345AM
 
 ```
 
@@ -60,7 +60,7 @@ dependencies {
 
 ```kt
         
-        AndroidUtils.isInternetAvailable(context) // it will return true or false
+   AndroidUtils.isInternetAvailable(context) // it will return true or false
 
 ```
 
@@ -70,35 +70,35 @@ dependencies {
 
 ```kt
         
-         var image : Bitmap = AndroidUtils.takeScreenshotOfView(rootView,200,200) // height & width is optional 
+  var image : Bitmap = AndroidUtils.takeScreenshotOfView(rootView,200,200) // height & width is optional 
          
-         var image2 : Bitmap = AndroidUtils.takeScreenshotOfView(rootView) // height & width is optional 
+  var image2 : Bitmap = AndroidUtils.takeScreenshotOfView(rootView) // height & width is optional 
 
 ```
 
 #### protect To Take Screenshot of a Screen
 
 ```kt
-       AndroidUtils.protectToScreenshot(this) // 
+   AndroidUtils.protectToScreenshot(this) // 
 
 ```
 
 ### Number Utils
 
 ```kt
-        val numberUtils: NumberUtils = AndroidUtils.getNumberUtils()
-        numberUtils.numberToWords(100)
-        numberUtils.numberInBangla("100")
+   val numberUtils: NumberUtils = AndroidUtils.getNumberUtils()
+   numberUtils.numberToWords(100)
+   numberUtils.numberInBangla("100")
         
-        // or you can use it with Quick Access
+   // or you can use it with Quick Access
         
-        val word = AndroidUtils.numberToWords(100)
+   val word = AndroidUtils.numberToWords(100)
         
-        val banglaNumber = AndroidUtils.numberInBangla("12-10-2022")
+   val banglaNumber = AndroidUtils.numberInBangla("12-10-2022")
         
-        val banNumber = AndroidUtils.getDigitBanglaFromEnglish("1234")
+   val banNumber = AndroidUtils.getDigitBanglaFromEnglish("1234")
         
-        val enNumber = AndroidUtils.getDigitEnglishFromBangla(banNumber)
+   val enNumber = AndroidUtils.getDigitEnglishFromBangla(banNumber)
 
 ```
 
@@ -106,24 +106,37 @@ dependencies {
 
 ```kt
      
-        val includingTax = AndroidUtils.getIncludingTax(100,20)
+  val includingTax = AndroidUtils.getIncludingTax(100,20)
         
-        val excludingTax = AndroidUtils.getExcludingTax(100,25)
+  val excludingTax = AndroidUtils.getExcludingTax(100,25)
         
-        val num = AndroidUtils.twoDigitDouble(14.4444334343)
+  val num = AndroidUtils.twoDigitDouble(14.4444334343)
         
-        val str:String = AndroidUtils.twoDigitString(14.364433)
+  val str:String = AndroidUtils.twoDigitString(14.364433)
         
-        val num = AndroidUtils.stringToNumber("13")
+  val num = AndroidUtils.stringToNumber("13")
+
+```
+
+
+### Encryption Utils
+
+```kt
+     
+  val encrypt = AndroidUtils.encrypt("hello from xihad")
+        
+  val decrypt = AndroidUtils.decrypt(encrypt) // hello from xihad
+  
 
 ```
 
 
 
 
+
 [//]: # (<img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/wp.jpeg" >)
 
-## Here a Sample code snippet
+## Here a Sample code snippet for SnackBar
 
 ```kt
   toast.setOnClickListener {
@@ -173,20 +186,7 @@ dependencies {
       
 ```
 
-#### Check Internet connection is available or not.
 
-```kt
-    if (AndroidUtils.getAppUtil().isInternetAvailable(this)) {
-                AndroidUtils.toast(this, "Available")
-            }
-```
-
-#### You can Play a mediaPlayer just calling one method.
-
-```kt
-    
-
-```
 
 ## Sample project
 
