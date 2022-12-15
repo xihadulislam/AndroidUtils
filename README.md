@@ -14,8 +14,8 @@ Add it in your root build.gradle at the end of repositories:
 allprojects {
 	repositories {
 		maven { url 'https://jitpack.io' }
-	}
-     }
+	  }
+   }
   
 ```
 
@@ -147,15 +147,15 @@ dependencies {
      
   AndroidUtils.setWebView(url, webView) // load webview
   
-  val systemApplications : List<ApplicationInfo> = ApplicationUtil.getSystemApplications(context)
+  val systemApplications : List<ApplicationInfo> = AndroidUtils.getSystemApplications(context)
   
-  val installApplications : List<ApplicationInfo> = ApplicationUtil.getInstallApplications(context)
+  val installApplications : List<ApplicationInfo> = AndroidUtils.getInstallApplications(context)
   
-  val allApplications : List<ApplicationInfo> = ApplicationUtil.getAllApplications(context)
+  val allApplications : List<ApplicationInfo> = AndroidUtils.getAllApplications(context)
   
-  val is = ApplicationUtil.isAppOnForeground(context)
+  val is = AndroidUtils.isAppOnForeground(context)
   
-  val isPack= ApplicationUtil.isSystemPackage(context)
+  val isPack= AndroidUtils.isSystemPackage(context)
   
 
 ```
