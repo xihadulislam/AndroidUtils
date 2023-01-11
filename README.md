@@ -226,6 +226,7 @@ the [app](https://github.com/xihadulislam/androidUtils/blob/master/app) module.
 
 #### This is my First built library, so if you face any issues or errors feel free to tell me. I will update it continuously.
 
+
 # Share
 
 > Like this project? Why not share to your friend :)
