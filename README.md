@@ -32,6 +32,7 @@ dependencies {
 
 ## Usage
 
+
 ### Access shared preference easily
 
 ```kt
