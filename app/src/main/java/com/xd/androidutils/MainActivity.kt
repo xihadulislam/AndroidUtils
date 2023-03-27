@@ -6,13 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.xihad.androidutils.AndroidUtils
 import com.xihad.androidutils.effect.ClickEffect
 import com.xihad.androidutils.effect.applyClickEffect
+import com.xihad.androidutils.ext.KotlinExtensionFunctions.printToLog
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
 
         val sharePrefSettings = AndroidUtils.getSharePrefSetting(this);
@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         val xd = sharePrefSettings.getStringValue("key2");
         AndroidUtils.toast(this, xd)
+
 
         toast.setOnClickListener {
             AndroidUtils.toast(this, "show something")
