@@ -13,17 +13,17 @@ import android.webkit.WebViewClient
 
 object ApplicationUtil {
 
-     fun isSystemPackage(pkgInfo: PackageInfo): Boolean {
+    fun isSystemPackage(pkgInfo: PackageInfo): Boolean {
         return pkgInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0
     }
 
-     fun isAppOnForeground(context: Context): Boolean {
+    fun Context.isAppOnForeground(): Boolean {
         val activityManager =
-            context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            this.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val appProcesses = activityManager.runningAppProcesses ?: return false
         for (appProcess in appProcesses) {
             if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND &&
-                appProcess.processName == context.applicationContext.packageName
+                appProcess.processName == this.applicationContext.packageName
             ) {
                 return true
             }
@@ -32,14 +32,14 @@ object ApplicationUtil {
     }
 
     @SuppressLint("QueryPermissionsNeeded")
-    fun getAllApplications(context: Context): List<ApplicationInfo> {
-        return context.packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
+    fun Context.getAllApplications(): List<ApplicationInfo> {
+        return this.packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
     }
 
     @SuppressLint("QueryPermissionsNeeded")
-    fun getInstallApplications(context: Context): List<ApplicationInfo> {
+    fun Context.getInstallApplications(): List<ApplicationInfo> {
         val appsInst: MutableList<ApplicationInfo> = mutableListOf()
-        val apps: List<ApplicationInfo> = context.packageManager.getInstalledApplications(0)
+        val apps: List<ApplicationInfo> = this.packageManager.getInstalledApplications(0)
         for (app in apps) {
             if (app.flags and (ApplicationInfo.FLAG_UPDATED_SYSTEM_APP or ApplicationInfo.FLAG_SYSTEM) > 0) {
                 // It is a system app
@@ -54,9 +54,9 @@ object ApplicationUtil {
 
 
     @SuppressLint("QueryPermissionsNeeded")
-    fun getSystemApplications(context: Context): List<ApplicationInfo> {
+    fun Context.getSystemApplications(): List<ApplicationInfo> {
         val appsInst: MutableList<ApplicationInfo> = mutableListOf()
-        val apps: List<ApplicationInfo> = context.packageManager.getInstalledApplications(0)
+        val apps: List<ApplicationInfo> = this.packageManager.getInstalledApplications(0)
         for (app in apps) {
             if (app.flags and (ApplicationInfo.FLAG_UPDATED_SYSTEM_APP or ApplicationInfo.FLAG_SYSTEM) > 0) {
                 // It is a system app
@@ -71,7 +71,7 @@ object ApplicationUtil {
 
 
     @SuppressLint("SetJavaScriptEnabled")
-     fun setWebView(url: String, webView: WebView) {
+    fun setWebView(url: String, webView: WebView) {
 
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
@@ -92,8 +92,6 @@ object ApplicationUtil {
             }
         }
     }
-
-
 
 
 }

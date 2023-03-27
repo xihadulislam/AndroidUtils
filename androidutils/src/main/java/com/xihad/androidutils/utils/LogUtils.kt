@@ -6,16 +6,16 @@ object LogUtils {
 
     private const val TAG = "LogUtils"
 
-    fun debug(msg: String) {
-        Log.d(TAG, "debug: $msg")
+    fun String.debug() {
+        Log.d(TAG, "debug: $this")
     }
 
-    fun error(msg: String) {
-        Log.e(TAG, "error: $msg")
+    fun String.error() {
+        Log.e(TAG, "error: $this")
     }
 
-    fun info(msg: String) {
-        Log.i(TAG, "info: $msg")
+    fun String.info() {
+        Log.i(TAG, "info: $this")
     }
 
 

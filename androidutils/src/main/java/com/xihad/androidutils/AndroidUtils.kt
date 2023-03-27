@@ -9,6 +9,10 @@ import android.webkit.WebView
 import android.widget.Toast
 import com.xihad.androidutils.effect.ClickEffect
 import com.xihad.androidutils.utils.*
+import com.xihad.androidutils.utils.ApplicationUtil.getAllApplications
+import com.xihad.androidutils.utils.ApplicationUtil.getInstallApplications
+import com.xihad.androidutils.utils.ApplicationUtil.getSystemApplications
+import com.xihad.androidutils.utils.ApplicationUtil.isAppOnForeground
 
 class AndroidUtils private constructor() {
 
@@ -96,14 +100,14 @@ class AndroidUtils private constructor() {
          */
         fun setWebView(url: String, webView: WebView) = ApplicationUtil.setWebView(url, webView)
 
-        fun getSystemApplications(context: Context) = ApplicationUtil.getSystemApplications(context)
+        fun getSystemApplications(context: Context) = context.getSystemApplications()
 
         fun getInstallApplications(context: Context) =
-            ApplicationUtil.getInstallApplications(context)
+            context.getInstallApplications()
 
-        fun getAllApplications(context: Context) = ApplicationUtil.getAllApplications(context)
+        fun getAllApplications(context: Context) = context.getAllApplications()
 
-        fun isAppOnForeground(context: Context) = ApplicationUtil.isAppOnForeground(context)
+        fun isAppOnForeground(context: Context) = context.isAppOnForeground()
 
         fun isSystemPackage(pkgInfo: PackageInfo) = ApplicationUtil.isSystemPackage(pkgInfo)
 

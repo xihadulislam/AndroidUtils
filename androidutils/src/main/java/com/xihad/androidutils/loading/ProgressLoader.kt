@@ -12,8 +12,8 @@ object ProgressLoader {
 
     private var paymentProgressLoader: ProgressDialog? = null
 
-    fun progressDialogShow(context: Context) {
-        paymentProgressLoader = ProgressDialog(context).apply {
+    fun Context.progressDialogShow() {
+        paymentProgressLoader = ProgressDialog(this).apply {
             Objects.requireNonNull<Window>(this.window)
                 .setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             this.isIndeterminate = true

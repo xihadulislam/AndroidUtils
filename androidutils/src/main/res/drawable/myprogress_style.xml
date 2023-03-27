@@ -12,7 +12,7 @@
         android:useLevel="false">
 
         <gradient
-            android:centerColor="#c1893fae"
+            android:centerColor="#E91E63"
             android:centerY="0.50"
             android:endColor="#441a59"
             android:startColor="#441a59"
