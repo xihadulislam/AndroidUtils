@@ -9,34 +9,34 @@ import java.io.ByteArrayOutputStream
 
 object ImageUtil {
 
-    fun imageToBitmap(image: ImageView): ByteArray {
-        val bitmap = (image.drawable as BitmapDrawable).bitmap
+    fun ImageView.imageToBitmap(): ByteArray {
+        val bitmap = (this.drawable as BitmapDrawable).bitmap
         val stream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
         return stream.toByteArray()
     }
 
-    fun imageToBase64(image: ImageView): String {
-        return Base64.encodeToString(imageToBitmap(image), Base64.NO_WRAP)
+    fun ImageView.imageToBase64(): String {
+        return Base64.encodeToString(this.imageToBitmap(), Base64.NO_WRAP)
     }
 
-    fun loadImage(imageView: ImageView, imageLink: String, placeholder: Int) {
-        Glide.with(imageView.context)
+    fun ImageView.loadImage(imageLink: String, placeholder: Int) {
+        Glide.with(this.context)
             .load(imageLink)
 //            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .error(placeholder)
             .placeholder(placeholder)
             .dontTransform()
-            .into(imageView)
+            .into(this)
     }
 
-    fun loadOfflineImage(imageView: ImageView, image: Int) {
-        Glide.with(imageView.context).load(image).placeholder(image).into(imageView)
+    fun ImageView.loadOfflineImage(image: Int) {
+        Glide.with(this.context).load(image).placeholder(image).into(this)
     }
 
 
-    fun byteArrayToBase64(byteArray: ByteArray): String =
-        Base64.encodeToString(byteArray, Base64.NO_WRAP)
+    fun ByteArray.byteArrayToBase64(): String =
+        Base64.encodeToString(this, Base64.NO_WRAP)
 
 
 }

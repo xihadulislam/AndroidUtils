@@ -13,6 +13,8 @@ import com.xihad.androidutils.utils.ApplicationUtil.getAllApplications
 import com.xihad.androidutils.utils.ApplicationUtil.getInstallApplications
 import com.xihad.androidutils.utils.ApplicationUtil.getSystemApplications
 import com.xihad.androidutils.utils.ApplicationUtil.isAppOnForeground
+import com.xihad.androidutils.utils.EncryptionUtil.decrypt
+import com.xihad.androidutils.utils.EncryptionUtil.encrypt
 
 class AndroidUtils private constructor() {
 
@@ -117,8 +119,8 @@ class AndroidUtils private constructor() {
         /**
          *  EncryptionUtil
          */
-        fun encrypt(value: String) = EncryptionUtil.encrypt(value)
-        fun decrypt(value: String) = EncryptionUtil.decrypt(value)
+        fun encrypt(value: String) = value.encrypt()
+        fun decrypt(value: String) = value.decrypt()
 
 
         /**
