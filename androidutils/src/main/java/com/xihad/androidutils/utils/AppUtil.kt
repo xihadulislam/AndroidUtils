@@ -60,4 +60,30 @@ object AppUtil {
     }
 
 
+    fun Context?.isOnline(): Boolean {
+        this?.apply {
+            val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val netInfo = cm.activeNetworkInfo
+            return netInfo != null && netInfo.isConnected
+        }
+        return false
+    }
+
+    fun Context?.isOnline(failBlock : () -> Unit  = { globalIntenetFailBock() }, successBlock : () -> Unit ) {
+        this?.apply {
+            val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val netInfo = cm.activeNetworkInfo
+            if (netInfo != null && netInfo.isConnected){
+                successBlock()
+            }else{
+                failBlock()
+            }
+        }?:failBlock()
+    }
+
+    fun Context?.globalIntenetFailBock(){
+        // show alter to user or implement custom code here
+    }
+
+
 }

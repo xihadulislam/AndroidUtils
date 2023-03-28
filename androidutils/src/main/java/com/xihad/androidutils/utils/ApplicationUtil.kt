@@ -74,6 +74,7 @@ object ApplicationUtil {
     fun setWebView(url: String, webView: WebView) {
 
         webView.webViewClient = object : WebViewClient() {
+            @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 view?.loadUrl(url!!)
                 return true
@@ -82,6 +83,7 @@ object ApplicationUtil {
         webView.settings.javaScriptEnabled = true
         webView.loadUrl(url)
         webView.webViewClient = object : WebViewClient() {
+            @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 view.loadUrl(url)
                 return true

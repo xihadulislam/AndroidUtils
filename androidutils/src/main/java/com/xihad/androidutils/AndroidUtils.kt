@@ -60,6 +60,8 @@ class AndroidUtils private constructor() {
 
         fun getNumberUtils(): NumberUtils = NumberUtils
 
+        fun getTextUtils(): TextUtils = TextUtils
+
 
         /**
          * Quick Access methods
