@@ -1,6 +1,7 @@
 package com.xihad.androidutils.utils
 
 import android.content.Context
+import android.content.res.Resources
 import android.os.Handler
 import android.os.Looper
 import android.view.View
@@ -12,6 +13,12 @@ import java.util.*
 import java.util.regex.Pattern
 
 object Utils {
+
+
+    val Int.pxTodp: Int
+        get() = (this / Resources.getSystem().displayMetrics.density).toInt()
+    val Int.dpTopx: Int
+        get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 
     fun validateEmailAddress(email: String?): Boolean {

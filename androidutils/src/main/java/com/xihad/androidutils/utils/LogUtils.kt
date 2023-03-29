@@ -19,6 +19,14 @@ object LogUtils {
     }
 
 
+    fun Any.logd(message: String?) {
+        Log.d(this::class.java.simpleName, "" + message)
+    }
+
+    fun Any.loge(message: String?) {
+        Log.e(this::class.java.toString(), "" + message)
+    }
+
     fun logAppend(str: String) {
         if (str.length > 4000) {
             logAppend(str.substring(4000))

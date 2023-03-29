@@ -24,8 +24,8 @@ object KotlinExtensionFunctions {
     name = "John",
     id = 1
     )
-    user.printToLog() // With default log tag
-    user.printToLog(tag = "USER_INFO") // With custom log tag
+    user.printToLog() // With default com.xihad.androidutils.ext.number.log tag
+    user.printToLog(tag = "USER_INFO") // With custom com.xihad.androidutils.ext.number.log tag
 
      */
 
@@ -157,7 +157,7 @@ object KotlinExtensionFunctions {
 
     /**
      *
-    if (obj.isNull) {
+    if (obj.com.xihad.androidutils.ext.standard.isNull) {
     // Run if object is null
     } else {
     // Run if object is not null
