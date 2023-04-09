@@ -9,6 +9,8 @@ interface Subject {
 
     fun unregister(spectator: Spectator?)
 
-    fun notifyObservers(message: String)
+    fun notifyObservers(key: String, data: Any)
+
+    fun clear()
 
 }

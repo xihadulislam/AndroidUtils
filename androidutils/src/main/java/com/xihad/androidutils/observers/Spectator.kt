@@ -5,5 +5,5 @@ package com.xihad.androidutils.observers
  */
 interface Spectator {
 
-    fun update(message: String)
+    fun update(payLoad: Pair<String, Any>)
 }
