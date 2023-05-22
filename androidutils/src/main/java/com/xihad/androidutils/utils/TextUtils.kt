@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import java.util.*
 
 object TextUtils {
 
@@ -76,5 +77,8 @@ object TextUtils {
         return toSpannable().spanText(span)
     }
 
+    fun MutableList<String>.concatenateLowercase(): String {
+        return this.joinToString("") { s -> s.toLowerCase(Locale.ROOT) }
+    }
 
 }

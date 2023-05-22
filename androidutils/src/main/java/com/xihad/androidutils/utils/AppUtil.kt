@@ -5,8 +5,34 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.SystemClock
+import android.view.View
 
 object AppUtil {
+
+
+    fun View.onClick(debounceDuration: Long = 300L, action: (View) -> Unit) {
+        setOnClickListener(DebouncedOnClickListener(debounceDuration) {
+            action(it)
+        })
+    }
+
+    private class DebouncedOnClickListener(
+        private val debounceDuration: Long,
+        private val clickAction: (View) -> Unit
+    ) : View.OnClickListener {
+
+        private var lastClickTime: Long = 0
+
+        override fun onClick(v: View) {
+            val now = SystemClock.elapsedRealtime()
+            if (now - lastClickTime >= debounceDuration) {
+                lastClickTime = now
+                clickAction(v)
+            }
+        }
+    }
+
+
     var mLastClickTime = 0L
 
     fun isOpenRecently(): Boolean {
@@ -69,19 +95,22 @@ object AppUtil {
         return false
     }
 
-    fun Context?.isOnline(failBlock : () -> Unit  = { globalIntenetFailBock() }, successBlock : () -> Unit ) {
+    fun Context?.isOnline(
+        failBlock: () -> Unit = { globalIntenetFailBock() },
+        successBlock: () -> Unit
+    ) {
         this?.apply {
             val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val netInfo = cm.activeNetworkInfo
-            if (netInfo != null && netInfo.isConnected){
+            if (netInfo != null && netInfo.isConnected) {
                 successBlock()
-            }else{
+            } else {
                 failBlock()
             }
-        }?:failBlock()
+        } ?: failBlock()
     }
 
-    fun Context?.globalIntenetFailBock(){
+    fun Context?.globalIntenetFailBock() {
         // show alter to user or implement custom code here
     }
 

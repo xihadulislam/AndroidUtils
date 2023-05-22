@@ -155,6 +155,16 @@ object PaymentUtils {
     }
 
 
+    fun String.toPriceAmount(): String {
+        val dec = DecimalFormat("###,###,###.00")
+        return dec.format(this.toDouble())
+    }
+
+    fun Double.toPriceAmount(): String {
+        val dec = DecimalFormat("###,###,###.00")
+        return dec.format(this)
+    }
+
 }
 
 data class CashModel(
