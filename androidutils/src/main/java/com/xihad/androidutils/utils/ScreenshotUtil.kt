@@ -10,6 +10,13 @@ import android.view.WindowManager
 object ScreenshotUtil {
 
 
+    fun View.takeScreenshot(
+        height: Int = this.height,
+        width: Int = this.width
+    ): Bitmap {
+        return takeScreenshotOfView(this, height, width)
+    }
+
     fun takeScreenshotOfView(
         view: View,
         height: Int = view.height,
