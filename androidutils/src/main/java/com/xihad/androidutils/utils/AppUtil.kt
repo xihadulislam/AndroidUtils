@@ -115,4 +115,13 @@ object AppUtil {
     }
 
 
+    fun deleteCache(context: Context) {
+        context.cacheDir.deleteRecursively()
+    }
+
+    fun Context.deleteCache() {
+        this.cacheDir.deleteRecursively()
+    }
+
+
 }

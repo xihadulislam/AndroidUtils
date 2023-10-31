@@ -15,7 +15,6 @@ import java.util.*
 object KotlinExtensionFunctions {
 
 
-
     inline fun <T> T.applyIf(condition: Boolean, block: T.() -> Unit): T {
         return if (condition) {
             this.apply(block)
@@ -23,7 +22,6 @@ object KotlinExtensionFunctions {
             this
         }
     }
-
 
 
     /**
@@ -107,11 +105,11 @@ object KotlinExtensionFunctions {
 
      */
 
-    fun View.snackbar(message: String, duration: Int = Snackbar.LENGTH_LONG) {
+    fun View.snackBar(message: String, duration: Int = Snackbar.LENGTH_LONG) {
         Snackbar.make(this, message, duration).show()
     }
 
-    fun View.snackbar(@StringRes message: Int, duration: Int = Snackbar.LENGTH_LONG) {
+    fun View.snackBar(@StringRes message: Int, duration: Int = Snackbar.LENGTH_LONG) {
         Snackbar.make(this, message, duration).show()
     }
 

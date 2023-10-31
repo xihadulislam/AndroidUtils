@@ -91,4 +91,16 @@ object ColorUtil {
         return String.format("#%06X", -0x1 and this).replace("#FF", "#")
     }
 
+
+    private fun TextView.setTextViewDrawableColor(color: Int) {
+        for (drawable in this.compoundDrawablesRelative) {
+            drawable?.mutate()
+            drawable?.colorFilter = PorterDuffColorFilter(
+                color, PorterDuff.Mode.SRC_IN
+            )
+        }
+    }
+
+
+
 }

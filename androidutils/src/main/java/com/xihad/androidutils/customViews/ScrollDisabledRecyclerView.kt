@@ -9,11 +9,9 @@ import org.jetbrains.annotations.Nullable
 
 class ScrollDisabledRecyclerView : RecyclerView {
 
-    constructor(context: Context?) : super(context!!)
-    constructor(context: Context?, @Nullable attrs: AttributeSet?) : super(context!!, attrs)
-    constructor(context: Context?, @Nullable attrs: AttributeSet?, defStyle: Int) : super(
-        context!!, attrs, defStyle
-    )
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(e: MotionEvent): Boolean {
