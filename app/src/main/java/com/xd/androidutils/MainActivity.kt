@@ -1,13 +1,8 @@
 package com.xd.androidutils
 
 import android.os.Bundle
-import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
 import com.xihad.androidutils.AndroidUtils
-import com.xihad.androidutils.effect.ClickEffect
-import com.xihad.androidutils.effect.applyClickEffect
-import com.xihad.androidutils.ext.KotlinExtensionFunctions.printToLog
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,66 +22,66 @@ class MainActivity : AppCompatActivity() {
         AndroidUtils.toast(this, xd)
 
 
-        toast.setOnClickListener {
-            AndroidUtils.toast(this, "show something")
-        }
-
-        showSnack.setOnClickListener {
-            AndroidUtils.getSnackBar(this).snackBar("show something")
-        }
-
-        showSnackSuccess.setOnClickListener {
-            AndroidUtils.getSnackBar(this).successSnack(root, "show something")
-        }
-
-        showSnackInfo.setOnClickListener {
-            AndroidUtils.getSnackBar(this).infoSnack(root, "show something", Gravity.BOTTOM, fun() {
-                AndroidUtils.toast(this, "click")
-            })
-        }
-
-        showSnackWarning.setOnClickListener {
-            AndroidUtils.getSnackBar(this).warningSnack(root, "show something")
-        }
-
-        showSnackError.setOnClickListener {
-            AndroidUtils.getSnackBar(this).errorSnack(root, "show something")
-        }
-
-
-        playTapSound.setOnClickListener {
-            AndroidUtils.getMediaPlayer().playClickSound(this)
-        }
-
-
-        startMediaPlayer.setOnClickListener {
-            //  AndroidUtils.startMediaPlayer()
-        }
-        stopMediaPlayer.setOnClickListener {
-            //  AndroidUtils.stopMediaPlayer()
-        }
-
-        showKeyboard.setOnClickListener {
-            //    AndroidUtils.showKeyboard()
-        }
-
-        startNextActivity.setOnClickListener {
-            AndroidUtils.getIntent().startNextActivity(this, SecondActivity::class.java)
-        }
-
-        afterNextActivity.setOnClickListener {
-            AndroidUtils.getIntent().afterNextActivity(this, 2000, SecondActivity::class.java)
-        }
-
-        startFacebookIntent.setOnClickListener {
-            AndroidUtils.getIntent().startFacebookIntent(this, "url")
-        }
-
-        isInternetAvailable.setOnClickListener {
-            if (AndroidUtils.getAppUtil().isInternetAvailable(this)) {
-                AndroidUtils.toast(this, "Available")
-            }
-        }
+//        toast.setOnClickListener {
+//            AndroidUtils.toast(this, "show something")
+//        }
+//
+//        showSnack.setOnClickListener {
+//            AndroidUtils.getSnackBar(this).snackBar("show something")
+//        }
+//
+//        showSnackSuccess.setOnClickListener {
+//            AndroidUtils.getSnackBar(this).successSnack(root, "show something")
+//        }
+//
+//        showSnackInfo.setOnClickListener {
+//            AndroidUtils.getSnackBar(this).infoSnack(root, "show something", Gravity.BOTTOM, fun() {
+//                AndroidUtils.toast(this, "click")
+//            })
+//        }
+//
+//        showSnackWarning.setOnClickListener {
+//            AndroidUtils.getSnackBar(this).warningSnack(root, "show something")
+//        }
+//
+//        showSnackError.setOnClickListener {
+//            AndroidUtils.getSnackBar(this).errorSnack(root, "show something")
+//        }
+//
+//
+//        playTapSound.setOnClickListener {
+//            AndroidUtils.getMediaPlayer().playClickSound(this)
+//        }
+//
+//
+//        startMediaPlayer.setOnClickListener {
+//            //  AndroidUtils.startMediaPlayer()
+//        }
+//        stopMediaPlayer.setOnClickListener {
+//            //  AndroidUtils.stopMediaPlayer()
+//        }
+//
+//        showKeyboard.setOnClickListener {
+//            //    AndroidUtils.showKeyboard()
+//        }
+//
+//        startNextActivity.setOnClickListener {
+//            AndroidUtils.getIntent().startNextActivity(this, SecondActivity::class.java)
+//        }
+//
+//        afterNextActivity.setOnClickListener {
+//            AndroidUtils.getIntent().afterNextActivity(this, 2000, SecondActivity::class.java)
+//        }
+//
+//        startFacebookIntent.setOnClickListener {
+//            AndroidUtils.getIntent().startFacebookIntent(this, "url")
+//        }
+//
+//        isInternetAvailable.setOnClickListener {
+//            if (AndroidUtils.getAppUtil().isInternetAvailable(this)) {
+//                AndroidUtils.toast(this, "Available")
+//            }
+//        }
 
 
     }
