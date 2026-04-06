@@ -1,170 +1,55 @@
 package com.xihad.androidutils.utils
 
-import android.annotation.SuppressLint
 import java.text.DecimalFormat
-import java.util.*
 import kotlin.math.ceil
 
 object PaymentUtils {
 
+    /** Returns the VAT amount already included in [total] at the given [taxRate] %. */
+    fun getIncludingTax(total: Double, taxRate: Double): Double =
+        twoDigitDouble(total * taxRate / (100 + taxRate))
 
-    fun getIncludingTax(total: Double, tax: Double): Double {
-        // VAT amount = Value inclusive of tax X tax rate ÷ (100 + tax rate)
-        return twoDigitDouble(total * tax / (100 + tax))
-    }
+    /** Returns the VAT amount to add on top of [total] at the given [taxRate] %. */
+    fun getExcludingTax(total: Double, taxRate: Double): Double =
+        twoDigitDouble(total * taxRate / 100)
 
-    fun getExcludingTax(total: Double, tax: Double): Double {
-        return twoDigitDouble(total * tax / 100)
-    }
+    fun twoDigitDouble(value: Double): Double =
+        "%.2f".format(value).trim().toDoubleOrNull() ?: value
 
+    fun twoDigitString(value: Double): String = "%.2f".format(value)
 
-    @SuppressLint("DefaultLocale")
-    fun twoDigitDouble(value: Double): Double {
-        var newVal = 0.00
-        try {
-            newVal = String.format(" %.2f", value).toDouble()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return newVal
-    }
+    fun stringToNumber(input: String): Double = input.toDoubleOrNull() ?: 0.0
 
-    @SuppressLint("DefaultLocale")
-    fun twoDigitString(value: Double): String {
-        var newVal = ""
-        newVal = try {
-            String.format(" %.2f", value)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            value.toString()
-        }
-        return newVal
-    }
+    fun String.toPriceAmount(): String = DecimalFormat("###,###,###.00").format(toDouble())
+    fun Double.toPriceAmount(): String = DecimalFormat("###,###,###.00").format(this)
 
-    fun stringToNumber(inputNumber: String): Double {
-        var outputNumber = 0.00
-        try {
-            outputNumber = inputNumber.toDouble()
-        } catch (e: NumberFormatException) {
-            e.printStackTrace()
-        }
-        return outputNumber
-    }
-
+    /**
+     * Generates up to 5 suggested cash amounts for a given [totalPrice]
+     * (exact, rounded to nearest 5/10/20/50, plus ceiling), with a trailing
+     * "Custom" option.
+     */
     fun getCashOption(totalPrice: Double): List<CashModel> {
+        if (totalPrice <= 0.0) return emptyList()
 
-        val cashList: MutableList<CashModel> = ArrayList()
-        val decimalFormat = DecimalFormat("#.00")
-        val currencyArray: MutableList<Double> = ArrayList()
-        if (totalPrice > 0.00) {
-            currencyArray.add(twoDigitDouble(totalPrice))
-            var gtm5 = totalPrice % 5
-            gtm5 = decimalFormat.format(gtm5).toDouble()
-            if (gtm5 != 0.0) {
-                currencyArray.add(twoDigitDouble(totalPrice - gtm5 + 5))
-            }
-            var gtm10 = totalPrice % 10
-            gtm10 = decimalFormat.format(gtm10).toDouble()
-            if (gtm10 != 0.0) {
-                currencyArray.add(twoDigitDouble(totalPrice - gtm10 + 10))
-            }
-            var gtm20 = totalPrice % 20
-            if (gtm20 != 0.0) {
-                gtm20 = decimalFormat.format(gtm20).toDouble()
-                currencyArray.add(twoDigitDouble(totalPrice - gtm20 + 20))
-            }
-            var gtm50 = totalPrice % 50
-            if (gtm50 != 0.0) {
-                gtm50 = decimalFormat.format(gtm50).toDouble()
-                currencyArray.add(twoDigitDouble(totalPrice - gtm50 + 50))
-            }
-            if (currencyArray.isNotEmpty() && currencyArray[0] % 1 != 0.0) {
-                currencyArray.add(1, twoDigitDouble(ceil(currencyArray[0])))
-            }
-            val hs: Set<Double> = HashSet(currencyArray)
-            currencyArray.clear()
-            currencyArray.addAll(hs)
-            currencyArray.sort()
-            if (currencyArray.size == 6) currencyArray.removeAt(5)
-            currencyArray.add(-5.5)
-            for (i in currencyArray.indices) {
-                val cashModel = CashModel()
-                if (i == 0) {
-                    if (currencyArray[i] == 5.501) {
-                        cashModel.amount = 0.0
-                        cashModel.labelAmount = "Custom"
-                    } else {
-                        cashModel.labelAmount = twoDigitString(currencyArray[i])
-                        cashModel.amount = twoDigitDouble(currencyArray[i])
-                    }
-                    cashList.add(cashModel)
-                }
-                if (i == 1) {
-                    if (currencyArray[i] == -5.5) {
-                        cashModel.amount = 0.0
-                        cashModel.labelAmount = "Custom"
-                    } else {
-                        cashModel.labelAmount = twoDigitString(currencyArray[i])
-                        cashModel.amount = twoDigitDouble(currencyArray[i])
-                    }
-                    cashList.add(cashModel)
-                }
-                if (i == 2) {
-                    if (currencyArray[i] == -5.5) {
-                        cashModel.amount = 0.0
-                        cashModel.labelAmount = "Custom"
-                    } else {
-                        cashModel.labelAmount = twoDigitString(currencyArray[i])
-                        cashModel.amount = twoDigitDouble(currencyArray[i])
-                    }
-                    cashList.add(cashModel)
-                }
-                if (i == 3) {
-                    if (currencyArray[i] == -5.5) {
-                        cashModel.amount = 0.0
-                        cashModel.labelAmount = "Custom"
-                    } else {
-                        cashModel.labelAmount = twoDigitString(currencyArray[i])
-                        cashModel.amount = twoDigitDouble(currencyArray[i])
-                    }
-                    cashList.add(cashModel)
-                }
-                if (i == 4) {
-                    if (currencyArray[i] == -5.5) {
-                        cashModel.amount = 0.0
-                        cashModel.labelAmount = "Custom"
-                    } else {
-                        cashModel.labelAmount = twoDigitString(currencyArray[i])
-                        cashModel.amount = twoDigitDouble(currencyArray[i])
-                    }
-                    cashList.add(cashModel)
-                }
-                if (i == 5) {
-                    if (currencyArray[i] == -5.5) {
-                        cashModel.amount = 0.0
-                        cashModel.labelAmount = "Custom"
-                    } else {
-                        cashModel.labelAmount = twoDigitString(currencyArray[i])
-                        cashModel.amount = twoDigitDouble(currencyArray[i])
-                    }
-                    cashList.add(cashModel)
-                }
-            }
+        val fmt = DecimalFormat("#.00")
+        val candidates = linkedSetOf<Double>()
+        candidates += twoDigitDouble(totalPrice)
+
+        // Ceiling to nearest integer
+        val ceiling = ceil(totalPrice)
+        if (ceiling != totalPrice) candidates += twoDigitDouble(ceiling)
+
+        // Round up to nearest 5, 10, 20, 50
+        for (step in listOf(5, 10, 20, 50)) {
+            val remainder = fmt.format(totalPrice % step).toDouble()
+            if (remainder != 0.0) candidates += twoDigitDouble(totalPrice - remainder + step)
         }
-        return cashList
+
+        val sorted = candidates.sorted().take(5)
+        return (sorted.map { amount ->
+            CashModel(labelAmount = twoDigitString(amount), amount = amount)
+        } + CashModel(labelAmount = "Custom", amount = 0.0))
     }
-
-
-    fun String.toPriceAmount(): String {
-        val dec = DecimalFormat("###,###,###.00")
-        return dec.format(this.toDouble())
-    }
-
-    fun Double.toPriceAmount(): String {
-        val dec = DecimalFormat("###,###,###.00")
-        return dec.format(this)
-    }
-
 }
 
 data class CashModel(

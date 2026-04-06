@@ -26,7 +26,7 @@ class AndroidUtils private constructor() {
         }
 
         fun getSharePrefSetting(context: Context): SharePrefSettings =
-            SharePrefSettings.getInstance(context.applicationContext)!!
+            SharePrefSettings.getInstance(context.applicationContext)
 
         fun getIntent(): IntentUtil = IntentUtil
 

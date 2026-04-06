@@ -3,235 +3,105 @@ package com.xihad.androidutils.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
-import android.text.TextUtils
 
-class SharePrefSettings private constructor(mContext: Context) {
+class SharePrefSettings private constructor(context: Context) {
 
-    private val preference: SharedPreferences
-    private var mEditor: SharedPreferences.Editor? = null
-    private var mEditorOpened = false
+    private val preference: SharedPreferences =
+        context.getSharedPreferences("app_pref", Context.MODE_PRIVATE)
 
-    private val preferenceEditor: SharedPreferences.Editor?
-        get() {
-            if (mEditorOpened) {
-                return mEditor
+    fun getString(key: String, default: String = ""): String =
+        preference.getString(key, default) ?: default
+
+    fun setString(key: String, value: String) =
+        preference.edit().putString(key, value).apply()
+
+    fun getInt(key: String, default: Int = 0): Int =
+        preference.getInt(key, default)
+
+    fun setInt(key: String, value: Int) =
+        preference.edit().putInt(key, value).apply()
+
+    fun getLong(key: String, default: Long = 0L): Long =
+        preference.getLong(key, default)
+
+    fun setLong(key: String, value: Long) =
+        preference.edit().putLong(key, value).apply()
+
+    fun getFloat(key: String, default: Float = 0f): Float =
+        preference.getFloat(key, default)
+
+    fun setFloat(key: String, value: Float) =
+        preference.edit().putFloat(key, value).apply()
+
+    fun getDouble(key: String, default: Double = 0.0): Double =
+        java.lang.Double.longBitsToDouble(preference.getLong(key, java.lang.Double.doubleToLongBits(default)))
+
+    fun setDouble(key: String, value: Double) =
+        preference.edit().putLong(key, java.lang.Double.doubleToRawLongBits(value)).apply()
+
+    fun getBoolean(key: String, default: Boolean = false): Boolean =
+        preference.getBoolean(key, default)
+
+    fun setBoolean(key: String, value: Boolean) =
+        preference.edit().putBoolean(key, value).apply()
+
+    fun remove(key: String) = preference.edit().remove(key).apply()
+
+    fun clear() = preference.edit().clear().apply()
+
+    fun contains(key: String): Boolean = preference.contains(key)
+
+    fun clearExcept(keep: Map<String, Any>) {
+        clear()
+        keep.forEach { (k, v) ->
+            when (v) {
+                is String -> setString(k, v)
+                is Int -> setInt(k, v)
+                is Long -> setLong(k, v)
+                is Float -> setFloat(k, v)
+                is Double -> setDouble(k, v)
+                is Boolean -> setBoolean(k, v)
             }
-            mEditorOpened = true
-            mEditor = preference.edit()
-            return mEditor
-        }
-
-    init {
-        preference = getSharedPreferenceFile(mContext, "app_pref")
-    }
-
-    /**
-     * if a prefFilename is not defined the getDefaultSharedPreferences is used.
-     *
-     * @param context should be ApplicationContext not Activity
-     * @return
-     */
-    private fun getSharedPreferenceFile(context: Context, prefFilename: String): SharedPreferences {
-        return if (TextUtils.isEmpty(prefFilename)) {
-            PreferenceManager
-                .getDefaultSharedPreferences(context)
-        } else {
-            context.getSharedPreferences(prefFilename, Context.MODE_PRIVATE)
         }
     }
 
-    fun commitPreferenceEditor() {
-        try {
-            mEditor!!.commit()
-        } catch (e: Exception) {
-            // TODO: handle exception
-        }
+    // ── Legacy API aliases (backwards-compatible) ────────────────────────────
 
-        mEditorOpened = false
-    }
+    fun setStringValue(key: String, value: String) = setString(key, value)
+    fun getStringValue(key: String): String = getString(key)
+    fun getStringValue(key: String, default: String): String = getString(key, default)
 
-    // string
-    fun setStringValue(key: String, `val`: String) {
+    fun setIntValue(key: String, value: Int) = setInt(key, value)
+    fun getIntValue(key: String): Int = getInt(key)
+    fun getIntValue(key: String, default: Int): Int = getInt(key, default)
 
-        try {
-            mEditor!!.putString(getSecureText(key), getSecureText(`val`))
-        } catch (e: Exception) {
-            val editor = preference.edit()
-            editor.putString(getSecureText(key), getSecureText(`val`))
-            editor.apply()
-        }
+    fun setLongValue(key: String, value: Long) = setLong(key, value)
+    fun getLongValue(key: String): Long = getLong(key)
+    fun getLongValue(key: String, default: Long): Long = getLong(key, default)
 
-    }
+    fun setFloatValue(key: String, value: Float) = setFloat(key, value)
+    fun getFloatValue(key: String): Float = getFloat(key)
+    fun getFloatValue(key: String, default: Float): Float = getFloat(key, default)
 
-    fun getStringValue(key: String): String {
-        val defff = preference.getString(getSecureText(key), "")
-        return if (defff!!.equals("", ignoreCase = true)) {
-            defff
-        } else {
-            getPlainText(defff)
-        }
-    }
+    fun setDoubleValue(key: String, value: Double) = setDouble(key, value)
+    fun getDoubleValue(key: String): Double = getDouble(key)
 
-    fun getStringValue(key: String, defaultstring: String): String {
-        val defff = preference.getString(getSecureText(key), defaultstring)
-        return if (defff!!.equals(defaultstring, ignoreCase = true)) {
-            defff
-        } else {
-            getPlainText(defff)
-        }
-    }
+    fun setBoolValue(key: String, value: Boolean) = setBoolean(key, value)
+    fun getBoolValue(key: String): Boolean = getBoolean(key)
+    fun getBoolValue(key: String, default: Boolean): Boolean = getBoolean(key, default)
 
-    // int
-    fun getIntValue(key: String): Int {
-        return preference.getInt(getSecureText(key), 0)
-    }
-
-    // int
-    fun getIntValue(key: String, defaultvalue: Int): Int {
-        return preference.getInt(getSecureText(key), defaultvalue)
-    }
-
-    fun setIntValue(key: String, `val`: Int) {
-
-        val editor = preference.edit()
-        editor.putInt(getSecureText(key), `val`)
-        editor.apply()
-    }
-
-    // long
-    fun getLongValue(key: String): Long {
-
-        return preference.getLong(getSecureText(key), 0)
-    }
-
-    // long
-    fun getLongValue(key: String, defaultvalue: Long): Long {
-
-        return preference.getLong(getSecureText(key), defaultvalue)
-    }
-
-    fun setLongValue(key: String, `val`: Long) {
-
-        val editor = preference.edit()
-        editor.putLong(getSecureText(key), `val`)
-        editor.apply()
-    }
-
-
-    // float
-    fun getFloatValue(key: String): Float {
-        return preference.getFloat(getSecureText(key), -1.0f)
-    }
-
-    fun getFloatValue(key: String, `val`: Float): Float {
-        return preference.getFloat(getSecureText(key), `val`)
-    }
-
-    fun setFloatValue(key: String, `val`: Float) {
-        val editor = preference.edit()
-        editor.putFloat(getSecureText(key), `val`)
-        editor.apply()
-    }
-
-    // double
-    fun getDoubleValue(key: String): Float {
-
-        return preference.getFloat(getSecureText(key), -1.0f)
-    }
-
-    fun setDoubleValue(key: String, `val`: Double) {
-
-        val editor = preference.edit()
-        editor.putFloat(getSecureText(key), `val`.toFloat())
-        editor.apply()
-    }
-
-    // boolean
-    fun setBoolValue(key: String, b: Boolean) {
-        val editor = preference.edit()
-        editor.putBoolean(getSecureText(key), b)
-        editor.apply()
-    }
-
-    fun removeKeyValue(key: String) {
-        try {
-            mEditor!!.remove(getSecureText(key))
-        } catch (e: Exception) {
-            // TODO: handle exception
-            val editor = preference.edit()
-            editor.remove(getSecureText(key))
-            editor.apply()
-        }
-
-    }
-
-
-    fun onResetExcept(data: MutableMap<String, Any>) {
-        val editor = preference.edit()
-        editor.clear()
-
-        val it = data.entries.iterator()
-        while (it.hasNext()) {
-            val pair = it.next()
-
-            when (val itemObject = pair.value) {
-                is Int -> {
-                    this.setIntValue(getSecureText(pair.key), itemObject)
-                }
-                is String -> {
-                    this.setStringValue(getSecureText(pair.key), getSecureText(itemObject))
-                }
-                is Boolean -> {
-                    this.setBoolValue(getSecureText(pair.key), itemObject)
-                }
-                is Long -> {
-                    this.setLongValue(getSecureText(pair.key), itemObject)
-                }
-                is Double -> {
-                    this.setDoubleValue(getSecureText(pair.key), itemObject)
-                }
-            }
-
-            it.remove()
-        }
-        editor.apply()
-    }
-
-    fun getBoolValue(key: String): Boolean {
-        return preference.getBoolean(getSecureText(key), false)
-    }
-
-    fun getBoolValue(key: String, defaultValue: Boolean): Boolean {
-        return preference.getBoolean(getSecureText(key), defaultValue)
-    }
-
-    private fun getSecureText(plain_data: String): String {
-        return plain_data
-    }
-
-    private fun getPlainText(encrypted_data: String): String {
-        return encrypted_data
-    }
-
-    fun clearData() {
-        val editor = preference.edit()
-        editor.clear()
-        editor.apply()
-    }
+    fun removeKeyValue(key: String) = remove(key)
+    fun clearData() = clear()
+    fun onResetExcept(data: MutableMap<String, Any>) = clearExcept(data)
 
     companion object {
         @SuppressLint("StaticFieldLeak")
-        private var appSettingSingleton: SharePrefSettings? = null
+        @Volatile
+        private var instance: SharePrefSettings? = null
 
-        /* Static 'instance' method */
-        fun getInstance(_mContext: Context): SharePrefSettings? {
-            if (appSettingSingleton == null)
-                appSettingSingleton =
-                    SharePrefSettings(
-                        _mContext
-                    )
-            return appSettingSingleton
-        }
+        fun getInstance(context: Context): SharePrefSettings =
+            instance ?: synchronized(this) {
+                instance ?: SharePrefSettings(context.applicationContext).also { instance = it }
+            }
     }
 }

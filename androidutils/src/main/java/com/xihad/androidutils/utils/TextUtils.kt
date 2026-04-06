@@ -8,33 +8,34 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
-import java.util.*
+import java.util.Locale
 
 object TextUtils {
 
     fun SpannableString.withClickableSpan(
-        clickablePart: String, onClickListener: () -> Unit
+        clickablePart: String,
+        onClickListener: () -> Unit
     ): SpannableString {
-        val clickableSpan = object : ClickableSpan() {
-            override fun onClick(widget: View) = onClickListener.invoke()
-
-        }
-        val clickablePartStart = indexOf(clickablePart)
+        val start = indexOf(clickablePart)
+        if (start < 0) return this
         setSpan(
-            clickableSpan,
-            clickablePartStart,
-            clickablePartStart + clickablePart.length,
+            object : ClickableSpan() {
+                override fun onClick(widget: View) = onClickListener()
+            },
+            start,
+            start + clickablePart.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         return this
     }
 
-    fun TextView.setColorOfSubstring(substring: String, color: Int) {
+    fun TextView.setColorOfSubstring(substring: String, @ColorInt color: Int) {
         try {
-            val spannable = android.text.SpannableString(text)
+            val spannable = SpannableString(text)
             val start = text.indexOf(substring)
+            if (start < 0) return
             spannable.setSpan(
-                ForegroundColorSpan(ContextCompat.getColor(context, color)),
+                ForegroundColorSpan(color),
                 start,
                 start + substring.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -45,40 +46,57 @@ object TextUtils {
         }
     }
 
-    fun SpannableStringBuilder.spanText(span: Any): SpannableStringBuilder {
-        setSpan(span, 0, length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
-        return this
+    fun TextView.setColorOfSubstringRes(substring: String, colorRes: Int) {
+        setColorOfSubstring(substring, ContextCompat.getColor(context, colorRes))
     }
 
     private fun String.toSpannable() = SpannableStringBuilder(this)
 
-    fun String.foregroundColor(@ColorInt color: Int): SpannableStringBuilder {
-        val span = ForegroundColorSpan(color)
-        return toSpannable().spanText(span)
+    private fun SpannableStringBuilder.spanText(span: Any): SpannableStringBuilder {
+        setSpan(span, 0, length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return this
     }
 
-    fun String.backgroundColor(@ColorInt color: Int): SpannableStringBuilder {
-        val span = BackgroundColorSpan(color)
-        return toSpannable().spanText(span)
-    }
+    fun String.foregroundColor(@ColorInt color: Int): SpannableStringBuilder =
+        toSpannable().spanText(ForegroundColorSpan(color))
 
-    fun String.relativeSize(size: Float): SpannableStringBuilder {
-        val span = RelativeSizeSpan(size)
-        return toSpannable().spanText(span)
-    }
+    fun String.backgroundColor(@ColorInt color: Int): SpannableStringBuilder =
+        toSpannable().spanText(BackgroundColorSpan(color))
 
-    fun String.supserscript(): SpannableStringBuilder {
-        val span = SuperscriptSpan()
-        return toSpannable().spanText(span)
-    }
+    fun String.relativeSize(size: Float): SpannableStringBuilder =
+        toSpannable().spanText(RelativeSizeSpan(size))
 
-    fun String.strike(): SpannableStringBuilder {
-        val span = StrikethroughSpan()
-        return toSpannable().spanText(span)
-    }
+    fun String.superscript(): SpannableStringBuilder =
+        toSpannable().spanText(SuperscriptSpan())
 
-    fun MutableList<String>.concatenateLowercase(): String {
-        return this.joinToString("") { s -> s.toLowerCase(Locale.ROOT) }
-    }
+    fun String.subscript(): SpannableStringBuilder =
+        toSpannable().spanText(SubscriptSpan())
 
+    fun String.strike(): SpannableStringBuilder =
+        toSpannable().spanText(StrikethroughSpan())
+
+    fun String.bold(): SpannableStringBuilder =
+        toSpannable().spanText(StyleSpan(android.graphics.Typeface.BOLD))
+
+    fun String.italic(): SpannableStringBuilder =
+        toSpannable().spanText(StyleSpan(android.graphics.Typeface.ITALIC))
+
+    fun String.underline(): SpannableStringBuilder =
+        toSpannable().spanText(UnderlineSpan())
+
+    fun MutableList<String>.concatenateLowercase(): String =
+        joinToString("") { it.lowercase(Locale.ROOT) }
+
+    /** Returns true if the string contains only whitespace or is empty. */
+    fun String.isBlankOrEmpty(): Boolean = isBlank()
+
+    /** Truncates a string to [maxLength] and appends [ellipsis] if it exceeds the limit. */
+    fun String.truncate(maxLength: Int, ellipsis: String = "…"): String =
+        if (length <= maxLength) this else take(maxLength) + ellipsis
+
+    /** Removes all extra whitespace, collapsing multiple spaces into one. */
+    fun String.collapseSpaces(): String = trim().replace(Regex("\\s+"), " ")
+
+    /** Returns the string repeated [n] times. */
+    fun String.repeat(n: Int): String = buildString { repeat(n) { append(this@repeat) } }
 }
