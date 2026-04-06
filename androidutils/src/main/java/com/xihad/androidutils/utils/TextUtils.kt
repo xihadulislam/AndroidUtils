@@ -98,5 +98,5 @@ object TextUtils {
     fun String.collapseSpaces(): String = trim().replace(Regex("\\s+"), " ")
 
     /** Returns the string repeated [n] times. */
-    fun String.repeat(n: Int): String = buildString { repeat(n) { append(this@repeat) } }
+    fun String.repeatStr(n: Int): String = repeat(n)
 }
