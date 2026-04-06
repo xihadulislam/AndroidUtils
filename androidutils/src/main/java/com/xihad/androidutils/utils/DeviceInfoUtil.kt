@@ -5,84 +5,63 @@ import android.app.Activity
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import java.util.*
 
 object DeviceInfoUtil {
-
 
     fun getDeviceName(): String {
         val manufacturer = Build.MANUFACTURER
         val model = Build.MODEL
-        return if (model.toLowerCase(Locale.ROOT)
-                .startsWith(manufacturer.toLowerCase(Locale.ROOT))
-        ) {
+        return if (model.lowercase().startsWith(manufacturer.lowercase())) {
             capitalize(model)
         } else {
-            capitalize(manufacturer) + " " + model
+            "${capitalize(manufacturer)} $model"
         }
     }
 
     private fun capitalize(s: String?): String {
-        if (s == null || s.isEmpty()) {
-            return ""
-        }
-        val first = s[0]
-        return if (Character.isUpperCase(first)) {
-            s
-        } else {
-            Character.toUpperCase(first).toString() + s.substring(1)
-        }
+        if (s.isNullOrEmpty()) return ""
+        return s[0].uppercaseChar() + s.substring(1)
     }
 
     fun getDeviceSuperInfo(): String {
-
-        var s = ""
-
+        val sb = StringBuilder("Debug-infos:")
         try {
-            s = "Debug-infos:"
-            s += """
-         OS Version: ${System.getProperty("os.version")}(${Build.VERSION.INCREMENTAL})"""
-            s += """
-         OS API Level: ${Build.VERSION.SDK_INT}"""
-            s += """
-         Device: ${Build.DEVICE}"""
-            s += """
-         Model (and Product): ${Build.MODEL} (${Build.PRODUCT})"""
-            s += """
-         RELEASE: ${Build.VERSION.RELEASE}"""
-            s += """
-         BRAND: ${Build.BRAND}"""
-            s += """
-         DISPLAY: ${Build.DISPLAY}"""
-            s += """
-         CPU_ABI: ${Build.CPU_ABI}"""
-            s += """
-         CPU_ABI2: ${Build.CPU_ABI2}"""
-            s += """
-         UNKNOWN: ${Build.UNKNOWN}"""
-            s += """
-         HARDWARE: ${Build.HARDWARE}"""
-            s += """
-         Build ID: ${Build.ID}"""
-            s += """
-         MANUFACTURER: ${Build.MANUFACTURER}"""
-            s += """
-         USER: ${Build.USER}"""
-            s += """
-         HOST: ${Build.HOST}"""
-
-        } catch (e: java.lang.Exception) {
-            Log.e("tag", "Error getting Device INFO")
+            sb.appendLine("\n OS Version: ${System.getProperty("os.version")} (${Build.VERSION.INCREMENTAL})")
+            sb.appendLine(" OS API Level: ${Build.VERSION.SDK_INT}")
+            sb.appendLine(" Device: ${Build.DEVICE}")
+            sb.appendLine(" Model (and Product): ${Build.MODEL} (${Build.PRODUCT})")
+            sb.appendLine(" RELEASE: ${Build.VERSION.RELEASE}")
+            sb.appendLine(" BRAND: ${Build.BRAND}")
+            sb.appendLine(" DISPLAY: ${Build.DISPLAY}")
+            sb.appendLine(" SUPPORTED_ABIS: ${Build.SUPPORTED_ABIS.joinToString()}")
+            sb.appendLine(" HARDWARE: ${Build.HARDWARE}")
+            sb.appendLine(" Build ID: ${Build.ID}")
+            sb.appendLine(" MANUFACTURER: ${Build.MANUFACTURER}")
+            sb.appendLine(" USER: ${Build.USER}")
+            sb.appendLine(" HOST: ${Build.HOST}")
+        } catch (e: Exception) {
+            Log.e("DeviceInfoUtil", "Error getting device info", e)
         }
-
-        return s
+        return sb.toString()
     }
-
 
     @SuppressLint("HardwareIds")
     fun getDeviceId(activity: Activity): String {
         return Settings.Secure.getString(activity.contentResolver, Settings.Secure.ANDROID_ID)
     }
 
+    fun getSupportedAbis(): Array<String> = Build.SUPPORTED_ABIS
 
+    fun getPrimaryAbi(): String = Build.SUPPORTED_ABIS.firstOrNull() ?: "unknown"
+
+    fun isEmulator(): Boolean {
+        return (Build.FINGERPRINT.startsWith("generic")
+                || Build.FINGERPRINT.startsWith("unknown")
+                || Build.MODEL.contains("google_sdk")
+                || Build.MODEL.contains("Emulator")
+                || Build.MODEL.contains("Android SDK built for x86")
+                || Build.MANUFACTURER.contains("Genymotion")
+                || Build.BRAND.startsWith("generic")
+                || Build.DEVICE.startsWith("generic"))
+    }
 }

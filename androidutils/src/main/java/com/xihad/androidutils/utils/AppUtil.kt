@@ -6,23 +6,19 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.SystemClock
 import android.view.View
+import java.util.concurrent.atomic.AtomicLong
 
 object AppUtil {
 
-
     fun View.onClick(debounceDuration: Long = 300L, action: (View) -> Unit) {
-        setOnClickListener(DebouncedOnClickListener(debounceDuration) {
-            action(it)
-        })
+        setOnClickListener(DebouncedOnClickListener(debounceDuration) { action(it) })
     }
 
     private class DebouncedOnClickListener(
         private val debounceDuration: Long,
         private val clickAction: (View) -> Unit
     ) : View.OnClickListener {
-
         private var lastClickTime: Long = 0
-
         override fun onClick(v: View) {
             val now = SystemClock.elapsedRealtime()
             if (now - lastClickTime >= debounceDuration) {
@@ -32,88 +28,51 @@ object AppUtil {
         }
     }
 
+    private val lastClickTimestamp = AtomicLong(0L)
 
-    var mLastClickTime = 0L
-
-    fun isOpenRecently(): Boolean {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-            return true
-        }
-        mLastClickTime = SystemClock.elapsedRealtime()
+    /** Returns true if called within 1 second of the previous call. */
+    fun isOpenRecently(thresholdMs: Long = 1000L): Boolean {
+        val now = SystemClock.elapsedRealtime()
+        val last = lastClickTimestamp.get()
+        if (now - last < thresholdMs) return true
+        lastClickTimestamp.compareAndSet(last, now)
         return false
     }
-
-    var lastClickTime = 0L
-    fun isOpenLastSecond(): Boolean {
-        if (SystemClock.elapsedRealtime() - lastClickTime < 1000) {
-            return true
-        }
-        lastClickTime = SystemClock.elapsedRealtime()
-        return false
-    }
-
 
     fun isInternetAvailable(context: Context): Boolean {
-        val connectivityManager =
-            context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        var result = false
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            val networkCapabilities = connectivityManager.activeNetwork ?: return false
-            val actNw =
-                connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
-            result = when {
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-                else -> false
-            }
+        val cm = context.applicationContext
+            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = cm.activeNetwork ?: return false
+            val caps = cm.getNetworkCapabilities(network) ?: return false
+            caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                    caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
         } else {
-            connectivityManager.run {
-                connectivityManager.activeNetworkInfo?.run {
-                    result = when (type) {
-                        ConnectivityManager.TYPE_WIFI -> true
-                        ConnectivityManager.TYPE_MOBILE -> true
-                        ConnectivityManager.TYPE_ETHERNET -> true
-                        else -> false
-                    }
-                }
-            }
+            @Suppress("DEPRECATION")
+            cm.activeNetworkInfo?.isConnected == true
         }
-
-        return result
     }
 
-
     fun Context?.isOnline(): Boolean {
-        this?.apply {
-            val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val netInfo = cm.activeNetworkInfo
-            return netInfo != null && netInfo.isConnected
+        this ?: return false
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = cm.activeNetwork ?: return false
+            val caps = cm.getNetworkCapabilities(network) ?: return false
+            caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                    caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+        } else {
+            @Suppress("DEPRECATION")
+            cm.activeNetworkInfo?.isConnected == true
         }
-        return false
     }
 
     fun Context?.isOnline(
-        failBlock: () -> Unit = { globalIntenetFailBock() },
+        failBlock: () -> Unit = {},
         successBlock: () -> Unit
     ) {
-        this?.apply {
-            val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val netInfo = cm.activeNetworkInfo
-            if (netInfo != null && netInfo.isConnected) {
-                successBlock()
-            } else {
-                failBlock()
-            }
-        } ?: failBlock()
+        if (this?.isOnline() == true) successBlock() else failBlock()
     }
-
-    fun Context?.globalIntenetFailBock() {
-        // show alter to user or implement custom code here
-    }
-
-
-
 }
