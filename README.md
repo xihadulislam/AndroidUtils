@@ -1,243 +1,441 @@
-# Android Utils
+# AndroidUtils
 
-<img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/android_utils.png" alt="alt text" style="width:200;height:200">
+<img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/android_utils.png" alt="AndroidUtils" width="200">
 
 [![](https://jitpack.io/v/xihadulislam/AndroidUtils.svg)](https://jitpack.io/#xihadulislam/AndroidUtils)
+[![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg)](https://android-arsenal.com/api?level=21)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-# To get a Git project into your build
+A modern, robust Android utility library that eliminates boilerplate code for common Android tasks.
 
-### Step 1. Add the JitPack repository to your build file
+---
 
-Add it in your root build.gradle at the end of repositories:
+## Setup
 
-``` 
-allprojects {
-	repositories {
-		maven { url 'https://jitpack.io' }
-	  }
-   }
-  
-```
+### Step 1 — Add JitPack repository
 
-### Step 2. Add the dependency
-
-``` 
-dependencies {
-    implementation 'com.github.xihadulislam:AndroidUtils:2.0.5'
+**Kotlin DSL (`settings.gradle.kts`):**
+```kotlin
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
 }
-  
 ```
 
-[![](https://jitpack.io/v/xihadulislam/AndroidUtils.svg)](https://jitpack.io/#xihadulislam/AndroidUtils)
+**Groovy DSL (`settings.gradle`):**
+```groovy
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+### Step 2 — Add the dependency
+
+**Kotlin DSL:**
+```kotlin
+implementation("com.github.xihadulislam:AndroidUtils:v3.1.0")
+```
+
+**Groovy DSL:**
+```groovy
+implementation 'com.github.xihadulislam:AndroidUtils:v3.1.0'
+```
+
+---
+
+## Features
+
+| Utility | Description |
+|---|---|
+| `SharedPreferences` | Thread-safe encrypted key-value storage |
+| `Encryption` | AES-128, MD5, SHA-1/256/512, Base64 |
+| `Network` | Internet availability checks |
+| `View` | Animations, visibility, enable/disable |
+| `Number` | Formatting, Bangla digits, number-to-words |
+| `Time` | Date formatting, relative time, date helpers |
+| `Payment` | Tax calculations, cash suggestions |
+| `Color` | Lighten, darken, hex conversion |
+| `Device` | Device info, emulator detection |
+| `Intent` | Activity navigation, social sharing |
+| `Screenshot` | Capture views, screen protection |
+| `SnackBar` | Styled success/error/warning/info bars |
+| `Text` | Spannable helpers, rich text formatting |
+
+---
 
 ## Usage
 
+### SharedPreferences
 
-### Access shared preference easily
+```kotlin
+val prefs = AndroidUtils.getSharePrefSetting(context)
 
-```kt
-      val sharePrefSettings = AndroidUtils.getSharePrefSetting(this);
+prefs.setString("token", "abc123")
+val token = prefs.getString("token")
 
-        sharePrefSettings.setBoolValue("key", false)
-        val kBoolean = sharePrefSettings.getBoolValue("key")
-        
-        Log.d(TAG, "onCreate: $kBoolean")
+prefs.setBoolean("logged_in", true)
+val isLoggedIn = prefs.getBoolean("logged_in")
 
-        sharePrefSettings.setStringValue("key2", "xihad islam")
-        val xd = sharePrefSettings.getStringValue("key2")
-        
-        Log.d(TAG, "onCreate: $xd")
+prefs.setInt("count", 5)
+prefs.setLong("timestamp", System.currentTimeMillis())
+prefs.setDouble("balance", 99.99)
 
+prefs.remove("token")
+prefs.clear()
 ```
 
+---
 
+### Encryption
 
-### Make a click effect of all view 
+```kotlin
+// AES-128 encrypt / decrypt
+val encrypted = AndroidUtils.encrypt("hello world")
+val decrypted = AndroidUtils.decrypt(encrypted)
 
-```kt
+// With custom key & IV (both must be exactly 16 chars)
+with(EncryptionUtil) {
+    val enc = "secret".encrypt(key = "myCustomKey12345", iv = "myCustomIV123456")
+    val dec = enc?.decrypt(key = "myCustomKey12345", iv = "myCustomIV123456")
 
-   AndroidUtils.applyClickEffect(view)
-   view.setOnClickListener{}
+    // Hashing
+    val md5    = "password".md5
+    val sha1   = "password".sha1
+    val sha256 = "password".sha256
+    val sha512 = "password".sha512
 
+    // Base64
+    val encoded = "hello".toBase64()
+    val decoded = encoded.fromBase64()
+
+    // Generate a secure random AES key
+    val key = EncryptionUtil.generateAesKey()
+}
 ```
 
+---
 
-### Generate a random unique uuid in ine line
+### Network
 
-```kt
-   val uId: String = AndroidUtils.uId() // example: 42N35260Y390345AM
+```kotlin
+AndroidUtils.isInternetAvailable(context)   // true / false
 
+context.isOnline()                          // extension, true / false
+
+context.isOnline(
+    failBlock    = { showNoInternetDialog() },
+    successBlock = { fetchData() }
+)
 ```
 
-### Check your Internet connection is Available or not
+---
 
-```kt
-        
-   AndroidUtils.isInternetAvailable(context) // it will return true or false
+### View Utilities
 
+```kotlin
+with(ViewUtil) {
+    // Visibility
+    view.visible()
+    view.gone()
+    view.invisible()
+    view.toggleVisibility()
+    view visibleIf isLoggedIn
+    view goneIf isLoading
+
+    // Enable / disable (with alpha feedback)
+    button.enable()
+    button.disable()
+
+    // Size & margin
+    view.setWidth(200)
+    view.setHeight(100)
+    view.resize(200, 100)
+    view.setMargins(left = 16, top = 8, right = 16, bottom = 8)
+
+    // Animations
+    view.fadeIn()
+    view.fadeOut()
+    view.scaleIn(duration = 300L)
+    view.scaleOut()
+    view.shake()                        // error shake animation
+
+    // Callbacks
+    view.fadeIn(duration = 250L) { doAfterFade() }
+}
 ```
 
-### Screenshot Utils
+---
 
-#### take Screenshot Of a View
+### Click Effect
 
-```kt
-        
-  var image : Bitmap = AndroidUtils.takeScreenshotOfView(rootView,200,200) // height & width is optional 
-         
-  var image2 : Bitmap = AndroidUtils.takeScreenshotOfView(rootView) // height & width is optional 
+```kotlin
+AndroidUtils.applyClickEffect(view)
 
+// Debounced click (prevents double-tap)
+with(AppUtil) {
+    button.onClick(debounceDuration = 500L) {
+        // only fires once per 500ms
+    }
+}
 ```
 
-#### protect To Take Screenshot of a Screen
+---
 
-```kt
-   AndroidUtils.protectToScreenshot(this) // 
+### Number Utilities
 
+```kotlin
+with(NumberUtils) {
+    // Number to words
+    NumberUtils.numberToWords(1500)         // "One Thousand Five Hundred"
+
+    // Ordinals
+    1.appendOrdinal()                        // "1st"
+    11.appendOrdinal()                       // "11th"
+    22.appendOrdinal()                       // "22nd"
+
+    // Thousand-separator formatting
+    1234567.formatWithCommas()               // "1,234,567"
+    9999999.99.formatWithCommas()            // "9,999,999.99"
+
+    // File size formatting
+    1048576L.formatBytes()                   // "1.0 MB"
+    2500000000L.formatBytes()               // "2.3 GB"
+
+    // Rounding
+    3.14159f.roundOff()                      // "3.14"
+    3.14159.roundOff(digits = 4)             // "3.1416"
+
+    // Bangla digits
+    NumberUtils.numberInBangla("12-10-2024")           // "১২-১০-২০২৪"
+    NumberUtils.getDigitBanglaFromEnglish("1234")      // "১২৩৪"
+    NumberUtils.getDigitEnglishFromBangla("১২৩৪")     // "1234"
+}
 ```
 
-### Number Utils
+---
 
-```kt
-   val numberUtils: NumberUtils = AndroidUtils.getNumberUtils()
-   numberUtils.numberToWords(100)
-   numberUtils.numberInBangla("100")
-        
-   // or you can use it with Quick Access
-        
-   val word = AndroidUtils.numberToWords(100)
-        
-   val banglaNumber = AndroidUtils.numberInBangla("12-10-2022")
-        
-   val banNumber = AndroidUtils.getDigitBanglaFromEnglish("1234")
-        
-   val enNumber = AndroidUtils.getDigitEnglishFromBangla(banNumber)
+### Time Utilities
 
+```kotlin
+with(TimeUtils) {
+    // Current time
+    val now: Long = TimeUtils.getCurrentTime()
+    val date: Date = TimeUtils.getCurrentTimeAndDate()
+
+    // Format a date
+    date.format("dd MMM yyyy")              // "06 Apr 2026"
+    date.format("hh:mm a")                 // "09:30 AM"
+
+    // Timestamp to formatted string
+    System.currentTimeMillis().toFormattedDate("yyyy-MM-dd")
+
+    // Relative time
+    pastTimestamp.toRelativeTime()          // "2 hours ago"
+    futureTimestamp.toRelativeTime()        // "3 days from now"
+
+    // Days between two dates
+    TimeUtils.daysBetween(fromDate, toDate)
+
+    // Checks
+    date.isToday()
+    date.isPast()
+    date.isFuture()
+
+    // Parse a date string
+    TimeUtils.parseDate("2026-04-06", pattern = "yyyy-MM-dd")
+
+    // Milliseconds to HH:MM:SS
+    TimeUtils.milliSecondToHMS(90000L)      // "00:01:30"
+
+    // Today's date string
+    TimeUtils.getToday()                    // "2026-04-06"
+}
 ```
 
-### Payment Utils
+---
 
-```kt
-     
-  val includingTax = AndroidUtils.getIncludingTax(100,20)
-        
-  val excludingTax = AndroidUtils.getExcludingTax(100,25)
-        
-  val num = AndroidUtils.twoDigitDouble(14.4444334343)
-        
-  val str:String = AndroidUtils.twoDigitString(14.364433)
-        
-  val num = AndroidUtils.stringToNumber("13")
+### Payment Utilities
 
+```kotlin
+val includingTax = AndroidUtils.getIncludingTax(100.0, 20.0)   // VAT included
+val excludingTax = AndroidUtils.getExcludingTax(100.0, 20.0)   // VAT on top
+
+val formatted = AndroidUtils.twoDigitDouble(14.4444)            // 14.44
+val str       = AndroidUtils.twoDigitString(14.364)             // "14.36"
+val num       = AndroidUtils.stringToNumber("13.5")             // 13.5
+
+// Cash suggestions for a given total
+with(PaymentUtils) {
+    val options = PaymentUtils.getCashOption(87.50)
+    // → [87.50, 88.00, 90.00, 100.00, "Custom"]
+    
+    99.99.toPriceAmount()                   // "99.99"
+    1234567.89.toPriceAmount()              // "1,234,567.89"
+}
 ```
 
-### Encryption Utils
+---
 
-```kt
-     
-  val encrypt = AndroidUtils.encrypt("hello from xihad")
-        
-  val decrypt = AndroidUtils.decrypt(encrypt) // hello from xihad
-  
+### Color Utilities
 
+```kotlin
+with(ColorUtil) {
+    // Colored drawable
+    val drawable = ColorUtil.getColoredDrawable(context, R.drawable.ic_icon, Color.RED)
+
+    // Status bar
+    ColorUtil.setStatusBarColor(activity, R.color.primary)
+
+    // Random pastel color
+    val color = ColorUtil.getRandomColor()
+
+    // Hex ↔ RGB
+    val (r, g, b) = "#FF5733".hexToRGB()
+    val hex = Color.RED.colorToHexString()   // "#FF0000"
+
+    // Lighten / darken
+    Color.BLUE.lighten(0.3f)
+    Color.RED.darken(0.2f)
+
+    // Check if dark (useful for choosing text color)
+    if (backgroundColor.isDark()) textView.setTextColor(Color.WHITE)
+
+    // Tint image
+    imageView.setTint(Color.GREEN)
+
+    // Tint TextView compound drawables
+    textView.setDrawableColor(R.color.icon_tint)
+}
 ```
 
-### Application Utils
+---
 
-```kt
-     
-  AndroidUtils.setWebView(url, webView) // load webview
-  
-  val systemApplications : List<ApplicationInfo> = AndroidUtils.getSystemApplications(context)
-  
-  val installApplications : List<ApplicationInfo> = AndroidUtils.getInstallApplications(context)
-  
-  val allApplications : List<ApplicationInfo> = AndroidUtils.getAllApplications(context)
-  
-  val is = AndroidUtils.isAppOnForeground(context)
-  
-  val isPack= AndroidUtils.isSystemPackage(context)
-  
+### Text / Spannable Utilities
 
+```kotlin
+with(TextUtils) {
+    // Colorize part of a TextView
+    textView.setColorOfSubstring("click here", Color.BLUE)
+    textView.setColorOfSubstringRes("click here", R.color.link)
+
+    // Rich text spans
+    "Hello".bold()
+    "World".italic()
+    "Link".underline()
+    "Price".foregroundColor(Color.RED)
+    "Note".backgroundColor(Color.YELLOW)
+    "small".relativeSize(0.8f)
+    "TM".superscript()
+    "H2O".subscript()
+    "old price".strike()
+
+    // String helpers
+    "  Hello   World  ".collapseSpaces()        // "Hello World"
+    "Long title text here".truncate(10)          // "Long title…"
+    "Long title text here".truncate(10, "...")   // "Long title..."
+    listOf("Hello", "World").concatenateLowercase() // "helloworld"
+}
 ```
 
-[//]: # (<img src="https://github.com/xihadulislam/androidUtils/blob/master/ss/wp.jpeg" >)
+---
 
-## Here a Sample code snippet for SnackBar
+### Device Info
 
-```kt
-  toast.setOnClickListener {
-            AndroidUtils.toast(this, "show something")
-        }
-
-        showSnack.setOnClickListener {
-            AndroidUtils.getSnackBar(this).snackBar("show something")
-        }
-
-        showSnackSuccess.setOnClickListener {
-            AndroidUtils.getSnackBar(this).successSnack(root, "show something")
-        }
-
-        showSnackInfo.setOnClickListener {
-            AndroidUtils.getSnackBar(this).infoSnack(root, "show something", Gravity.BOTTOM, fun() {
-                AndroidUtils.toast(this, "click")
-            })
-        }
-
-        showSnackWarning.setOnClickListener {
-            AndroidUtils.getSnackBar(this).warningSnack(root, "show something")
-        }
-
-        showSnackError.setOnClickListener {
-            AndroidUtils.getSnackBar(this).errorSnack(root, "show something")
-        }
-
-
+```kotlin
+DeviceInfoUtil.getDeviceName()          // "Samsung Galaxy S24"
+DeviceInfoUtil.getDeviceId(activity)    // Android ID
+DeviceInfoUtil.getPrimaryAbi()          // "arm64-v8a"
+DeviceInfoUtil.getSupportedAbis()       // ["arm64-v8a", "armeabi-v7a"]
+DeviceInfoUtil.isEmulator()             // true / false
+DeviceInfoUtil.getDeviceSuperInfo()     // full debug info string
 ```
 
-#### Intent several activities just need one line code
+---
 
-```kt
-           startNextActivity.setOnClickListener {
-            AndroidUtils.getIntent().startNextActivity(this, SecondActivity::class.java)
-        }
+### Screenshot
 
-        afterNextActivity.setOnClickListener {
-            AndroidUtils.getIntent().afterNextActivity(this, 2000, SecondActivity::class.java)
-        }
+```kotlin
+// Capture a view as Bitmap
+val bitmap = AndroidUtils.takeScreenshotOfView(rootView)
+val bitmap2 = AndroidUtils.takeScreenshotOfView(rootView, width = 500, height = 300)
 
-        startFacebookIntent.setOnClickListener {
-            AndroidUtils.getIntent().startFacebookIntent(this, "url")
-        }
-
-      
+// Prevent screenshots on this screen
+AndroidUtils.protectToScreenshot(activity)
 ```
 
-## Sample project
+---
 
-Clone this repo and check out
-the [app](https://github.com/xihadulislam/androidUtils/blob/master/app) module.
+### SnackBar
+
+```kotlin
+val snack = AndroidUtils.getSnackBar(activity)
+
+snack.snackBar("Default message")
+snack.successSnack(rootView, "Saved successfully!")
+snack.errorSnack(rootView, "Something went wrong")
+snack.warningSnack(rootView, "Check your connection")
+snack.infoSnack(rootView, "Tap to learn more") { /* on click */ }
+```
+
+---
+
+### Intent & Navigation
+
+```kotlin
+val intent = AndroidUtils.getIntent()
+
+// Navigate immediately
+intent.startNextActivity(activity, SecondActivity::class.java)
+intent.startNextActivity(activity, SecondActivity::class.java, isFinish = true)
+
+// Navigate after a delay
+intent.afterNextActivity(activity, milliSecond = 2000, SecondActivity::class.java)
+
+// Share / social
+intent.startShareIntent(activity, "Check out this app!")
+intent.startFeedbackActivity(activity, "support@example.com")
+intent.startRateAppActivity(activity)
+intent.startWhatsAppIntent(activity, "Hello!")
+intent.startFacebookIntent(activity, "https://...")
+intent.startTwitterIntent(activity, "https://...")
+```
+
+---
+
+### Unique ID
+
+```kotlin
+val uid = AndroidUtils.uId()    // e.g. "42N35260Y390345AM"
+```
+
+---
+
+## Sample Project
+
+Clone this repo and check out the [app](https://github.com/xihadulislam/AndroidUtils/blob/master/app) module.
+
+---
 
 ## Author
 
-* **xihad islam**
-    * **[Linkedin](https://www.linkedin.com/in/xihad-islam-315417185/)**
-    * **[Github](https://github.com/xihadulislam)**
-    * **[Twitter](https://twitter.com/islamxihad)**
+**xihad islam**
+- [LinkedIn](https://www.linkedin.com/in/xihad-islam-315417185/)
+- [GitHub](https://github.com/xihadulislam)
+- [Twitter](https://twitter.com/islamxihad)
 
-#### This is my First built library, so if you face any issues or errors feel free to tell me. I will update it continuously.
+---
 
-
-# Share
-
-> Like this project? Why not share to your friend :)
->
-> <a href="https://twitter.com/intent/tweet?text=Look%20at%20this%20nice%20project,%20a%20of%20Android%20Utils%20app.%20Made%20by%20@xihadulislam%20Url%20https://github.com/xihadulislam/androidUtils" target="_blank" title="share to twitter" style="width:100%"><img src="http://i.imgur.com/GlSWEr7.png" title="share to twitter"/></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.facebook.com/sharer/sharer.php?u=https://github.com/xihadulislam/androidUtils" target="_blank" title="share to facebook" style="width:100%"><img src="http://i.imgur.com/0evE2QJ.png" title="share to facebook"/></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://plus.google.com/share?url=https://github.com/xihadulislam/androidUtils" target="_blank" title="share to google+" style="width:100%"><img src="http://i.imgur.com/zvDBPqj.png" title="share to google+"/></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://service.weibo.com/share/share.php?searchPic=false&title=Android Utils &url=https://github.com/xihadulislam/androidUtils&utm_content=share_button&utm_campaign=post_show&utm_medium=github&utm_source=weibo" target="_blank" title="share to sina weibo" style="width:100%"><img src="http://i.imgur.com/pH9q4qu.png" title="share to sina weibo"/></a>
-
-## Licence
+## License
 
 ```
-Copyright 2021 @xihad islam.
+Copyright 2024 xihad islam
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
