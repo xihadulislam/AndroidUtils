@@ -13,7 +13,7 @@ android {
         minSdk 21
         targetSdk 35
         versionCode 300
-        versionName "3.0.0"
+        versionName "3.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -49,7 +49,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.xihad'
                 artifactId = 'AndroidUtils'
-                version = '3.0.0'
+                version = '3.0.1'
             }
         }
     }
