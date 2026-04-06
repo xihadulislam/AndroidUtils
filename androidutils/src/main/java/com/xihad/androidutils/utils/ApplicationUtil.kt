@@ -14,7 +14,7 @@ import android.webkit.WebViewClient
 object ApplicationUtil {
 
     fun isSystemPackage(pkgInfo: PackageInfo): Boolean {
-        return pkgInfo.applicationInfo?.flags?.and(ApplicationInfo.FLAG_SYSTEM) != 0
+        return (pkgInfo.applicationInfo?.flags?.and(ApplicationInfo.FLAG_SYSTEM) ?: 0) != 0
     }
 
     fun Context.isAppOnForeground(): Boolean {
