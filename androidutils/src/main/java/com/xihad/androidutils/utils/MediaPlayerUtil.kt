@@ -18,11 +18,11 @@ object MediaPlayerUtil {
      * @param file      Raw resource ID of the audio file.
      * @param isLooping Whether the audio should loop.
      */
-    fun startMediaPlayer(context: Context, file: Int, isLooping: Boolean = false) {
+    fun startMediaPlayer(context: Context, file: Int, isLoopingNew: Boolean = false) {
         stopMediaPlayer()
         mPlayer = MediaPlayer.create(context.applicationContext, file)
         mPlayer?.apply {
-            isLooping = isLooping
+            isLooping = isLoopingNew
             if (!isLooping) {
                 setOnCompletionListener { stopMediaPlayer() }
             }
