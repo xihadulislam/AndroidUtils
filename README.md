@@ -6,7 +6,8 @@
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg)](https://android-arsenal.com/api?level=21)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-A modern, robust Android utility library that eliminates boilerplate code for common Android tasks.
+A modern, robust Android utility library — works from both **Kotlin** and **Java**.  
+Zero memory leaks. All utils are stateless or use `WeakReference` / `applicationContext` where needed.
 
 ---
 
@@ -40,12 +41,12 @@ dependencyResolutionManagement {
 
 **Kotlin DSL:**
 ```kotlin
-implementation("com.github.xihadulislam:AndroidUtils:v3.1.0")
+implementation("com.github.xihadulislam:AndroidUtils:v3.1.1")
 ```
 
 **Groovy DSL:**
 ```groovy
-implementation 'com.github.xihadulislam:AndroidUtils:v3.1.0'
+implementation 'com.github.xihadulislam:AndroidUtils:v3.1.1'
 ```
 
 ---
@@ -54,19 +55,29 @@ implementation 'com.github.xihadulislam:AndroidUtils:v3.1.0'
 
 | Utility | Description |
 |---|---|
-| `SharedPreferences` | Thread-safe encrypted key-value storage |
+| `SharedPreferences` | Thread-safe key-value storage |
 | `Encryption` | AES-128, MD5, SHA-1/256/512, Base64 |
+| `Validation` | Email, phone, URL, password strength, credit card, IP |
 | `Network` | Internet availability checks |
-| `View` | Animations, visibility, enable/disable |
+| `Clipboard` | Copy, paste, clear |
+| `View / Animations` | Fade, scale, shake, visibility, enable/disable |
+| `Bitmap` | Resize, rotate, crop circle, save to gallery |
+| `StatusBar` | Edge-to-edge, immersive mode, icon color |
+| `Notification` | Channel creation, show/progress/cancel |
+| `Storage` | Internal/external space, cache size, clear cache |
 | `Number` | Formatting, Bangla digits, number-to-words |
 | `Time` | Date formatting, relative time, date helpers |
+| `String` | Mask, initials, slug, camelCase, snake_case |
 | `Payment` | Tax calculations, cash suggestions |
 | `Color` | Lighten, darken, hex conversion |
 | `Device` | Device info, emulator detection |
+| `AppInfo` | Version, debug check, Play Store, app settings |
 | `Intent` | Activity navigation, social sharing |
 | `Screenshot` | Capture views, screen protection |
+| `Debounce` | Per-instance debounce, no global state |
 | `SnackBar` | Styled success/error/warning/info bars |
 | `Text` | Spannable helpers, rich text formatting |
+| `Log` | Debug, error, info, long-message logging |
 
 ---
 
@@ -81,8 +92,6 @@ prefs.setString("token", "abc123")
 val token = prefs.getString("token")
 
 prefs.setBoolean("logged_in", true)
-val isLoggedIn = prefs.getBoolean("logged_in")
-
 prefs.setInt("count", 5)
 prefs.setLong("timestamp", System.currentTimeMillis())
 prefs.setDouble("balance", 99.99)
@@ -91,32 +100,84 @@ prefs.remove("token")
 prefs.clear()
 ```
 
+```java
+// Java
+SharePrefSettings prefs = AndroidUtils.getSharePrefSetting(context);
+prefs.setString("token", "abc123");
+String token = prefs.getString("token", "");
+```
+
+---
+
+### Validation
+
+```kotlin
+AndroidUtils.isValidEmail("user@example.com")        // true
+AndroidUtils.isValidPhone("+8801712345678")           // true
+AndroidUtils.isValidUrl("https://example.com")        // true
+AndroidUtils.isValidCreditCard("4111111111111111")    // true
+AndroidUtils.isStrongPassword("MyPass@123")           // true
+
+val strength = AndroidUtils.getPasswordStrength("abc") // WEAK
+
+with(ValidationUtil) {
+    "01712345678".isValidBDPhone()                    // BD number check
+    "192.168.1.1".isValidIPv4()
+    "#FF5733".isValidHexColor()
+    "1234".isValidPin()
+    ValidationUtil.getCardType("4111111111111111")    // VISA
+}
+```
+
+```java
+// Java
+AndroidUtils.isValidEmail("user@example.com");
+AndroidUtils.isStrongPassword("MyPass@123");
+```
+
+---
+
+### Clipboard
+
+```kotlin
+AndroidUtils.copyToClipboard(context, "Hello!")
+val text = AndroidUtils.pasteFromClipboard(context)
+AndroidUtils.clearClipboard(context)
+
+// Full API
+with(ClipboardUtil) {
+    context.copyText("text", label = "my label")
+    context.hasText()
+}
+```
+
+```java
+// Java
+AndroidUtils.copyToClipboard(context, "Hello!");
+String text = AndroidUtils.pasteFromClipboard(context);
+```
+
 ---
 
 ### Encryption
 
 ```kotlin
-// AES-128 encrypt / decrypt
 val encrypted = AndroidUtils.encrypt("hello world")
 val decrypted = AndroidUtils.decrypt(encrypted)
 
-// With custom key & IV (both must be exactly 16 chars)
 with(EncryptionUtil) {
+    // Custom key & IV (both exactly 16 chars)
     val enc = "secret".encrypt(key = "myCustomKey12345", iv = "myCustomIV123456")
     val dec = enc?.decrypt(key = "myCustomKey12345", iv = "myCustomIV123456")
 
-    // Hashing
     val md5    = "password".md5
-    val sha1   = "password".sha1
     val sha256 = "password".sha256
     val sha512 = "password".sha512
 
-    // Base64
-    val encoded = "hello".toBase64()
-    val decoded = encoded.fromBase64()
+    val b64 = "hello".toBase64()
+    val raw = b64.fromBase64()
 
-    // Generate a secure random AES key
-    val key = EncryptionUtil.generateAesKey()
+    val key = EncryptionUtil.generateAesKey()   // secure random 16-char key
 }
 ```
 
@@ -125,14 +186,15 @@ with(EncryptionUtil) {
 ### Network
 
 ```kotlin
-AndroidUtils.isInternetAvailable(context)   // true / false
+AndroidUtils.isInternetAvailable(context)
 
-context.isOnline()                          // extension, true / false
-
-context.isOnline(
-    failBlock    = { showNoInternetDialog() },
-    successBlock = { fetchData() }
-)
+with(AppUtil) {
+    context.isOnline()
+    context.isOnline(
+        failBlock    = { showNoInternet() },
+        successBlock = { fetchData() }
+    )
+}
 ```
 
 ---
@@ -141,48 +203,125 @@ context.isOnline(
 
 ```kotlin
 with(ViewUtil) {
-    // Visibility
-    view.visible()
-    view.gone()
-    view.invisible()
+    view.visible();  view.gone();  view.invisible()
     view.toggleVisibility()
     view visibleIf isLoggedIn
     view goneIf isLoading
 
-    // Enable / disable (with alpha feedback)
-    button.enable()
-    button.disable()
+    button.enable();  button.disable()
 
-    // Size & margin
-    view.setWidth(200)
-    view.setHeight(100)
     view.resize(200, 100)
     view.setMargins(left = 16, top = 8, right = 16, bottom = 8)
 
-    // Animations
     view.fadeIn()
     view.fadeOut()
     view.scaleIn(duration = 300L)
     view.scaleOut()
-    view.shake()                        // error shake animation
-
-    // Callbacks
-    view.fadeIn(duration = 250L) { doAfterFade() }
+    view.shake()
 }
 ```
 
 ---
 
-### Click Effect
+### Bitmap
 
 ```kotlin
-AndroidUtils.applyClickEffect(view)
+with(BitmapUtil) {
+    bitmap.resize(300, 300)
+    bitmap.scaleToFit(512)
+    bitmap.rotate(90f)
+    bitmap.flip(horizontal = true)
+    bitmap.toCircle()
+    bitmap.toRoundedCorners(24f)
+    bitmap.toJpegByteArray(quality = 80)
+    bitmap.saveToGallery(context, "photo_name")   // returns Uri?
+    bitmap.saveToCache(context)                   // returns File
+    view.toBitmap()
+}
+```
 
-// Debounced click (prevents double-tap)
-with(AppUtil) {
-    button.onClick(debounceDuration = 500L) {
-        // only fires once per 500ms
-    }
+---
+
+### Status Bar
+
+```kotlin
+with(StatusBarUtil) {
+    activity.setStatusBarColor(Color.WHITE)
+    activity.setStatusBarIconsDark(true)        // dark icons for light bg
+    activity.makeStatusBarTransparent()
+    activity.enableEdgeToEdge()
+    activity.enterImmersiveMode()
+    activity.exitImmersiveMode()
+    activity.hideStatusBar()
+    activity.showStatusBar()
+    activity.keepScreenOn()
+    activity.setNavigationBarColor(Color.BLACK)
+    val height = activity.getStatusBarHeight()
+}
+```
+
+---
+
+### Notification
+
+```kotlin
+// Create channel once (e.g. in Application.onCreate)
+AndroidUtils.createNotificationChannel(context, "main_channel", "General")
+
+// Show notification
+AndroidUtils.showNotification(context, 1, "main_channel", "Title", "Body", R.drawable.ic_notif)
+
+// Cancel
+AndroidUtils.cancelNotification(context, 1)
+
+// Full API
+with(NotificationUtil) {
+    NotificationUtil.showProgress(context, 2, "main_channel", "Uploading", "45%", R.drawable.ic_upload, max = 100, progress = 45)
+    NotificationUtil.cancelAll(context)
+    NotificationUtil.areNotificationsEnabled(context)
+}
+```
+
+---
+
+### Storage
+
+```kotlin
+val free  = AndroidUtils.getFreeInternalStorage()
+val cache = AndroidUtils.getCacheSize(context)
+AndroidUtils.clearCache(context)
+AndroidUtils.formatStorageSize(free)         // "1.2 GB"
+
+with(StorageUtil) {
+    StorageUtil.getTotalInternalStorage()
+    StorageUtil.getUsedInternalStorage()
+    StorageUtil.isExternalStorageAvailable()
+    StorageUtil.getFreeExternalStorage()
+}
+```
+
+---
+
+### String Utilities
+
+```kotlin
+AndroidUtils.maskEmail("xihad@gmail.com")           // "xi*****@gmail.com"
+AndroidUtils.maskPhone("01712345678")                // "*******5678"
+AndroidUtils.toInitials("Xihad Islam")              // "XI"
+AndroidUtils.capitalizeWords("hello world")          // "Hello World"
+AndroidUtils.toSlug("Hello World! 2024")             // "hello-world-2024"
+
+with(StringUtil) {
+    "helloWorld".toSnakeCase()                       // "hello_world"
+    "hello_world".toCamelCase()                      // "helloWorld"
+    "4111111111111111".maskCreditCard()              // "**** **** **** 1111"
+    "racecar".isPalindrome()                         // true
+    "  Hello   World  ".removeWhitespace()
+    "abc123def".digitsOnly()                         // "123"
+    "abc123def".lettersOnly()                        // "abcdef"
+    "Hello World".wordCount()                        // 2
+    "Long text here".truncate(8)                     // "Long tex…"
+    null.orDefault("fallback")                       // "fallback"
 }
 ```
 
@@ -191,31 +330,18 @@ with(AppUtil) {
 ### Number Utilities
 
 ```kotlin
+AndroidUtils.numberToWords(1500)                     // "One Thousand Five Hundred"
+AndroidUtils.numberInBangla("12-10-2024")            // "১২-১০-২০২৪"
+AndroidUtils.getDigitBanglaFromEnglish("1234")       // "১২৩৪"
+AndroidUtils.getDigitEnglishFromBangla("১২৩৪")      // "1234"
+
 with(NumberUtils) {
-    // Number to words
-    NumberUtils.numberToWords(1500)         // "One Thousand Five Hundred"
-
-    // Ordinals
-    1.appendOrdinal()                        // "1st"
-    11.appendOrdinal()                       // "11th"
-    22.appendOrdinal()                       // "22nd"
-
-    // Thousand-separator formatting
-    1234567.formatWithCommas()               // "1,234,567"
-    9999999.99.formatWithCommas()            // "9,999,999.99"
-
-    // File size formatting
-    1048576L.formatBytes()                   // "1.0 MB"
-    2500000000L.formatBytes()               // "2.3 GB"
-
-    // Rounding
-    3.14159f.roundOff()                      // "3.14"
-    3.14159.roundOff(digits = 4)             // "3.1416"
-
-    // Bangla digits
-    NumberUtils.numberInBangla("12-10-2024")           // "১২-১০-২০২৪"
-    NumberUtils.getDigitBanglaFromEnglish("1234")      // "১২৩৪"
-    NumberUtils.getDigitEnglishFromBangla("১২৩৪")     // "1234"
+    1.appendOrdinal()                                // "1st"
+    11.appendOrdinal()                               // "11th"
+    1234567.formatWithCommas()                       // "1,234,567"
+    1048576L.formatBytes()                           // "1.0 MB"
+    3.14159f.roundOff()                              // "3.14"
+    3.14159.roundOff(digits = 4)                     // "3.1416"
 }
 ```
 
@@ -225,37 +351,15 @@ with(NumberUtils) {
 
 ```kotlin
 with(TimeUtils) {
-    // Current time
-    val now: Long = TimeUtils.getCurrentTime()
-    val date: Date = TimeUtils.getCurrentTimeAndDate()
-
-    // Format a date
-    date.format("dd MMM yyyy")              // "06 Apr 2026"
-    date.format("hh:mm a")                 // "09:30 AM"
-
-    // Timestamp to formatted string
-    System.currentTimeMillis().toFormattedDate("yyyy-MM-dd")
-
-    // Relative time
-    pastTimestamp.toRelativeTime()          // "2 hours ago"
-    futureTimestamp.toRelativeTime()        // "3 days from now"
-
-    // Days between two dates
+    val now = TimeUtils.getCurrentTime()
+    Date().format("dd MMM yyyy")                     // "07 Apr 2026"
+    System.currentTimeMillis().toFormattedDate()     // "2026-04-07"
+    pastTimestamp.toRelativeTime()                   // "2 hours ago"
+    futureTimestamp.toRelativeTime()                 // "in 3 days"
     TimeUtils.daysBetween(fromDate, toDate)
-
-    // Checks
-    date.isToday()
-    date.isPast()
-    date.isFuture()
-
-    // Parse a date string
-    TimeUtils.parseDate("2026-04-06", pattern = "yyyy-MM-dd")
-
-    // Milliseconds to HH:MM:SS
-    TimeUtils.milliSecondToHMS(90000L)      // "00:01:30"
-
-    // Today's date string
-    TimeUtils.getToday()                    // "2026-04-06"
+    date.isToday();  date.isPast();  date.isFuture()
+    TimeUtils.milliSecondToHMS(90000L)               // "00:01:30"
+    TimeUtils.getToday()                             // "2026-04-07"
 }
 ```
 
@@ -264,20 +368,16 @@ with(TimeUtils) {
 ### Payment Utilities
 
 ```kotlin
-val includingTax = AndroidUtils.getIncludingTax(100.0, 20.0)   // VAT included
-val excludingTax = AndroidUtils.getExcludingTax(100.0, 20.0)   // VAT on top
+AndroidUtils.getIncludingTax(100.0, 20.0)           // VAT included in price
+AndroidUtils.getExcludingTax(100.0, 20.0)           // VAT on top of price
+AndroidUtils.twoDigitDouble(14.4444)                // 14.44
+AndroidUtils.twoDigitString(14.364)                 // "14.36"
+AndroidUtils.stringToNumber("13.5")                 // 13.5
 
-val formatted = AndroidUtils.twoDigitDouble(14.4444)            // 14.44
-val str       = AndroidUtils.twoDigitString(14.364)             // "14.36"
-val num       = AndroidUtils.stringToNumber("13.5")             // 13.5
-
-// Cash suggestions for a given total
 with(PaymentUtils) {
-    val options = PaymentUtils.getCashOption(87.50)
-    // → [87.50, 88.00, 90.00, 100.00, "Custom"]
-    
-    99.99.toPriceAmount()                   // "99.99"
-    1234567.89.toPriceAmount()              // "1,234,567.89"
+    PaymentUtils.getCashOption(87.50)               // [87.50, 88.00, 90.00, 100.00, Custom]
+    99.99.toPriceAmount()                           // "99.99"
+    1234567.89.toPriceAmount()                      // "1,234,567.89"
 }
 ```
 
@@ -287,60 +387,15 @@ with(PaymentUtils) {
 
 ```kotlin
 with(ColorUtil) {
-    // Colored drawable
-    val drawable = ColorUtil.getColoredDrawable(context, R.drawable.ic_icon, Color.RED)
-
-    // Status bar
     ColorUtil.setStatusBarColor(activity, R.color.primary)
-
-    // Random pastel color
-    val color = ColorUtil.getRandomColor()
-
-    // Hex ↔ RGB
-    val (r, g, b) = "#FF5733".hexToRGB()
-    val hex = Color.RED.colorToHexString()   // "#FF0000"
-
-    // Lighten / darken
+    ColorUtil.getRandomColor()
+    "#FF5733".hexToRGB()                            // Triple(255, 87, 51)
+    Color.RED.colorToHexString()                    // "#FF0000"
     Color.BLUE.lighten(0.3f)
     Color.RED.darken(0.2f)
-
-    // Check if dark (useful for choosing text color)
-    if (backgroundColor.isDark()) textView.setTextColor(Color.WHITE)
-
-    // Tint image
+    Color.BLACK.isDark()                            // true
     imageView.setTint(Color.GREEN)
-
-    // Tint TextView compound drawables
     textView.setDrawableColor(R.color.icon_tint)
-}
-```
-
----
-
-### Text / Spannable Utilities
-
-```kotlin
-with(TextUtils) {
-    // Colorize part of a TextView
-    textView.setColorOfSubstring("click here", Color.BLUE)
-    textView.setColorOfSubstringRes("click here", R.color.link)
-
-    // Rich text spans
-    "Hello".bold()
-    "World".italic()
-    "Link".underline()
-    "Price".foregroundColor(Color.RED)
-    "Note".backgroundColor(Color.YELLOW)
-    "small".relativeSize(0.8f)
-    "TM".superscript()
-    "H2O".subscript()
-    "old price".strike()
-
-    // String helpers
-    "  Hello   World  ".collapseSpaces()        // "Hello World"
-    "Long title text here".truncate(10)          // "Long title…"
-    "Long title text here".truncate(10, "...")   // "Long title..."
-    listOf("Hello", "World").concatenateLowercase() // "helloworld"
 }
 ```
 
@@ -349,12 +404,60 @@ with(TextUtils) {
 ### Device Info
 
 ```kotlin
-DeviceInfoUtil.getDeviceName()          // "Samsung Galaxy S24"
-DeviceInfoUtil.getDeviceId(activity)    // Android ID
-DeviceInfoUtil.getPrimaryAbi()          // "arm64-v8a"
-DeviceInfoUtil.getSupportedAbis()       // ["arm64-v8a", "armeabi-v7a"]
-DeviceInfoUtil.isEmulator()             // true / false
-DeviceInfoUtil.getDeviceSuperInfo()     // full debug info string
+DeviceInfoUtil.getDeviceName()                      // "Samsung Galaxy S24"
+DeviceInfoUtil.getDeviceId(activity)                // Android ID
+DeviceInfoUtil.getPrimaryAbi()                      // "arm64-v8a"
+DeviceInfoUtil.getSupportedAbis()
+DeviceInfoUtil.isEmulator()
+DeviceInfoUtil.getDeviceSuperInfo()                 // full debug string
+```
+
+---
+
+### App Info
+
+```kotlin
+AndroidUtils.getVersionName(context)                // "3.1.1"
+AndroidUtils.getVersionCode(context)                // 311
+AndroidUtils.isDebugBuild(context)                  // true/false
+AndroidUtils.isAppInstalled(context, "com.whatsapp")
+AndroidUtils.openPlayStore(context)
+AndroidUtils.openAppSettings(context)
+
+with(AppInfoUtil) {
+    AppInfoUtil.launchApp(context, "com.instagram.android")
+    AppInfoUtil.isInstalledFromPlayStore(context)
+    AppInfoUtil.getInstallerPackage(context)
+}
+```
+
+---
+
+### Debounce
+
+```kotlin
+// Each screen/component holds its own instance
+private val debounce = DebounceUtils()
+
+searchView.addTextChangedListener {
+    debounce.run(400) { doSearch(it) }
+}
+
+// Fixed delays
+debounce.run300 { doSomething() }
+debounce.run500 { doSomethingElse() }
+
+// Cancel
+debounce.cancel()
+```
+
+```java
+// Java
+private final DebounceUtils debounce = AndroidUtils.newDebounce();
+
+searchView.addTextChangedListener(text -> {
+    debounce.run(400, () -> doSearch(text));
+});
 ```
 
 ---
@@ -362,12 +465,22 @@ DeviceInfoUtil.getDeviceSuperInfo()     // full debug info string
 ### Screenshot
 
 ```kotlin
-// Capture a view as Bitmap
 val bitmap = AndroidUtils.takeScreenshotOfView(rootView)
-val bitmap2 = AndroidUtils.takeScreenshotOfView(rootView, width = 500, height = 300)
-
-// Prevent screenshots on this screen
 AndroidUtils.protectToScreenshot(activity)
+```
+
+---
+
+### Click Effect
+
+```kotlin
+AndroidUtils.applyClickEffect(view)
+
+with(AppUtil) {
+    button.onClick(debounceDuration = 500L) {
+        // fires once per 500ms
+    }
+}
 ```
 
 ---
@@ -378,7 +491,7 @@ AndroidUtils.protectToScreenshot(activity)
 val snack = AndroidUtils.getSnackBar(activity)
 
 snack.snackBar("Default message")
-snack.successSnack(rootView, "Saved successfully!")
+snack.successSnack(rootView, "Saved!")
 snack.errorSnack(rootView, "Something went wrong")
 snack.warningSnack(rootView, "Check your connection")
 snack.infoSnack(rootView, "Tap to learn more") { /* on click */ }
@@ -391,15 +504,10 @@ snack.infoSnack(rootView, "Tap to learn more") { /* on click */ }
 ```kotlin
 val intent = AndroidUtils.getIntent()
 
-// Navigate immediately
 intent.startNextActivity(activity, SecondActivity::class.java)
 intent.startNextActivity(activity, SecondActivity::class.java, isFinish = true)
-
-// Navigate after a delay
 intent.afterNextActivity(activity, milliSecond = 2000, SecondActivity::class.java)
-
-// Share / social
-intent.startShareIntent(activity, "Check out this app!")
+intent.startShareIntent(activity, "Check this out!")
 intent.startFeedbackActivity(activity, "support@example.com")
 intent.startRateAppActivity(activity)
 intent.startWhatsAppIntent(activity, "Hello!")
@@ -414,6 +522,49 @@ intent.startTwitterIntent(activity, "https://...")
 ```kotlin
 val uid = AndroidUtils.uId()    // e.g. "42N35260Y390345AM"
 ```
+
+---
+
+## Java Usage
+
+All methods are annotated with `@JvmStatic` and use `Runnable` instead of lambdas where needed:
+
+```java
+// Init
+AndroidUtils.init();
+
+// Basic usage
+AndroidUtils.toast(context, "Hello");
+AndroidUtils.isInternetAvailable(context);
+AndroidUtils.copyToClipboard(context, "text");
+AndroidUtils.isValidEmail("user@example.com");
+AndroidUtils.getVersionName(context);
+
+// SharedPreferences
+SharePrefSettings prefs = AndroidUtils.getSharePrefSetting(context);
+prefs.setString("key", "value");
+
+// Debounce — each caller holds its own instance
+private final DebounceUtils debounce = AndroidUtils.newDebounce();
+debounce.run(300, () -> doSearch());
+
+// Post delayed
+AndroidUtils.postDelayed(2000, () -> doSomething());
+```
+
+---
+
+## Memory Safety
+
+| Pattern | How handled |
+|---|---|
+| Activity in SnackBar | `WeakReference<Activity>` + `isFinishing`/`isDestroyed` guard |
+| Activity in delayed navigation | `WeakReference<Activity>` in `afterNextActivity` |
+| MediaPlayer Context | Always uses `context.applicationContext` |
+| Debounce callbacks | Per-instance `DebounceUtils` — no global state |
+| Click effects | `WeakReference<View>` in `ClickEffect` |
+| SharedPreferences singleton | Uses `applicationContext` only |
+| All other utils | Stateless `object` — no stored references |
 
 ---
 
