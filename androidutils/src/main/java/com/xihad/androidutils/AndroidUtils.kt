@@ -112,6 +112,9 @@ class AndroidUtils private constructor() {
         @JvmStatic
         fun getStorageUtil(): StorageUtil = StorageUtil
 
+        @JvmStatic
+        fun getJsonUtils(): JsonUtils = JsonUtils
+
         // ── Toast ─────────────────────────────────────────────────────────────
 
         @JvmStatic
